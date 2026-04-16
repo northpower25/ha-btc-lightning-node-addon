@@ -39,7 +39,7 @@ url_decode() {
 
     while [ "${i}" -lt "${len}" ]; do
         c="${encoded:${i}:1}"
-        if [ "${c}" = "%" ] && [ $((i + 2)) -lt "${len}" ]; then
+        if [ "${c}" = "%" ] && (( i + 2 < len )); then
             hex="${encoded:$((i + 1)):2}"
             if echo "${hex}" | grep -Eq '^[0-9A-Fa-f]{2}$'; then
                 decoded+=$(printf '%b' "\\x${hex}")
@@ -87,8 +87,11 @@ extract_nwc_param() {
 
 check_ws_relay_reachability() {
     local relay_url="${1}"
-    if ! command -v timeout >/dev/null 2>&1 || ! command -v websocat >/dev/null 2>&1; then
-        bashio::log.warning "Relay check skipped: timeout or websocat not found. Relay connectivity cannot be verified."
+    local missing_tools=()
+    command -v timeout >/dev/null 2>&1 || missing_tools+=("timeout")
+    command -v websocat >/dev/null 2>&1 || missing_tools+=("websocat")
+    if [ "${#missing_tools[@]}" -gt 0 ]; then
+        bashio::log.warning "Relay check skipped: missing ${missing_tools[*]}. Relay connectivity cannot be verified."
         return 0
     fi
 
@@ -168,7 +171,7 @@ if [ "${NODE_MODE}" = "cloud" ]; then
         exit 1
     fi
     check_ws_relay_reachability "${NWC_RELAY}" || true
-    bashio::log.info "Scope check note: NWC scopes are managed in Alby Hub and validated in the HA integration setup flow."
+    bashio::log.info "Scope check info: NWC scopes are managed in Alby Hub and validated later in the HA integration setup flow."
 
     # Export for HA integration to pick up via the supervisor API
     export NWC_CONNECTION_STRING="${NWC_CONNECTION_STRING}"
