@@ -15,6 +15,13 @@ Dieses Repository stellt ein Home Assistant Add-on bereit, mit dem du **Bitcoin-
 - **Konfigurierbare Betriebsoptionen**  
   Netzwerk, Logging, Backups, externe Erreichbarkeit und Backend-spezifische Parameter.
 
+## Zugehörige Repositories
+
+| Repository | Zweck |
+|---|---|
+| [`ha-btc-alby-hub-addon`](https://github.com/northpower25/ha-btc-alby-hub-addon) *(dieses Repo)* | Home Assistant Add-on (Supervisor-basiert) |
+| [`ha-btc-alby-hub-integration`](https://github.com/northpower25/ha-btc-alby-hub-integration) | HACS Custom Integration für HA Container / alle HA-Typen |
+
 ## Enthaltene Komponenten
 
 - `alby-hub-addon/` – Home Assistant Add-on (Dockerfile, Add-on-Konfiguration, Startlogik)
