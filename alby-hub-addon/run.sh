@@ -27,10 +27,35 @@ mkdir -p "${DATA_DIR}/hub" "${DATA_DIR}/nostr" "${DATA_DIR}/backups"
 export WORK_DIR="${DATA_DIR}/hub"
 export PORT=8080
 export LOG_LEVEL="${LOG_LEVEL}"
+NOSTR_PROXY_TARGET_DEFAULT="ws://127.0.0.1:7447/v1"
+NOSTR_PROXY_PORT_DEFAULT="3334"
 
 url_decode() {
-    local data="${1//+/ }"
-    printf '%b' "${data//%/\\x}"
+    local encoded="${1}"
+    local decoded=""
+    local i=0
+    local len=${#encoded}
+    local c hex
+
+    while [ "${i}" -lt "${len}" ]; do
+        c="${encoded:${i}:1}"
+        if [ "${c}" = "%" ] && [ $((i + 2)) -lt "${len}" ]; then
+            hex="${encoded:$((i + 1)):2}"
+            if echo "${hex}" | grep -Eq '^[0-9A-Fa-f]{2}$'; then
+                decoded+=$(printf '%b' "\\x${hex}")
+                i=$((i + 3))
+                continue
+            fi
+        elif [ "${c}" = "+" ]; then
+            decoded+=" "
+            i=$((i + 1))
+            continue
+        fi
+        decoded+="${c}"
+        i=$((i + 1))
+    done
+
+    printf '%s' "${decoded}"
 }
 
 extract_nwc_param() {
@@ -55,7 +80,7 @@ extract_nwc_param() {
 check_ws_relay_reachability() {
     local relay_url="${1}"
     if ! command -v timeout >/dev/null 2>&1 || ! command -v websocat >/dev/null 2>&1; then
-        bashio::log.warning "Relay check skipped (missing timeout/websocat in runtime)."
+        bashio::log.warning "Relay check skipped: timeout or websocat not found. Relay connectivity cannot be verified."
         return 0
     fi
 
@@ -256,9 +281,9 @@ elif [ "${NODE_MODE}" = "expert" ]; then
 
     # ── Optional NOSTR relay ──
     if bashio::var.true "${NOSTR_RELAY_ENABLED}"; then
-        bashio::log.info "Starting NOSTR relay proxy on port 3334..."
-        NOSTR_DATA_DIR="${DATA_DIR}/nostr" /opt/nostr-relay/start.sh "ws://127.0.0.1:7447/v1" "3334" &
-        check_ws_relay_reachability "ws://127.0.0.1:3334" || true
+        bashio::log.info "Starting NOSTR relay proxy on port ${NOSTR_PROXY_PORT_DEFAULT}..."
+        NOSTR_DATA_DIR="${DATA_DIR}/nostr" /opt/nostr-relay/start.sh "${NOSTR_PROXY_TARGET_DEFAULT}" "${NOSTR_PROXY_PORT_DEFAULT}" &
+        check_ws_relay_reachability "ws://127.0.0.1:${NOSTR_PROXY_PORT_DEFAULT}" || true
     fi
 
     bashio::log.info "Alby Hub is running (PID ${HUB_PID})"

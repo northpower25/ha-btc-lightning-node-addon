@@ -35,4 +35,4 @@ Dieses Add-on stellt Alby Hub für Home Assistant bereit.
 
 - `missing required 'relay' query parameter`: NWC-String ohne Relay-Parameter
 - `missing required 'secret' query parameter`: NWC-String ohne Secret-Parameter
-- `Relay not reachable right now`: Relay ist temporär nicht erreichbar (Setup kann weiterlaufen)
+- `Relay not reachable right now`: Relay-Verbindungscheck ist fehlgeschlagen; Netzwerk/Firewall prüfen. Start läuft trotzdem weiter (Warnung im MVP).

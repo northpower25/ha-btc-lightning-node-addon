@@ -10,5 +10,15 @@ if ! command -v websocat >/dev/null 2>&1; then
   exit 1
 fi
 
+if ! echo "${TARGET_WS}" | grep -Eq '^wss?://'; then
+  echo "ERROR: TARGET_WS must start with ws:// or wss://"
+  exit 1
+fi
+
+if ! echo "${LISTEN_PORT}" | grep -Eq '^[0-9]+$' || [ "${LISTEN_PORT}" -lt 1 ] || [ "${LISTEN_PORT}" -gt 65535 ]; then
+  echo "ERROR: LISTEN_PORT must be a number between 1 and 65535"
+  exit 1
+fi
+
 echo "Starting NOSTR relay proxy on ${LISTEN_HOST}:${LISTEN_PORT} -> ${TARGET_WS}"
 exec websocat -E -s "${LISTEN_HOST}:${LISTEN_PORT}" "${TARGET_WS}"
