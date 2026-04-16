@@ -20,7 +20,7 @@
 11. [Umsetzungsphasen](#11-umsetzungsphasen)
 12. [Zusätzliche Feature-Ideen](#12-zusätzliche-feature-ideen)
 13. [Technische Abhängigkeiten](#13-technische-abhängigkeiten)
-14. [Offene Fragen vor Umsetzungsstart](#14-offene-fragen-vor-umsetzungsstart)
+14. [Verbindliche Entscheidungen für MVP (April 2026)](#14-verbindliche-entscheidungen-für-mvp-april-2026)
 
 ---
 
@@ -946,6 +946,12 @@ Entities werden angelegt → Dashboard wird automatisch erstellt ✓
 > Zusätzlich gilt für alle Setup-Schritte (Add-on + Integration): Jede Eingabe erhält eine kurze
 > **„Warum wird das benötigt?"**-Erklärung direkt im UI, inklusive verständlicher Fehlermeldungen
 > und nächstem konkreten Schritt bei Validierungsfehlern.
+>
+> „Mehr erfahren“-Links verweisen auf die passenden Handbuch-Abschnitte:
+> [Setup-Tests (DE)](docs/handbook.de.md#setup-tests-de) ·
+> [Setup-Tests (EN)](docs/handbook.en.md#setup-tests-en) ·
+> [Support-Matrix (DE)](docs/handbook.de.md#support-matrix-de) ·
+> [Support-Matrix (EN)](docs/handbook.en.md#support-matrix-en)
 
 ### Entities
 
@@ -1335,18 +1341,18 @@ Ermöglicht `user@homeassistant.local` als NOSTR-Identität im eigenen Heimnetz.
 
 ---
 
-## 14. Offene Fragen vor Umsetzungsstart
+## 14. Verbindliche Entscheidungen für MVP (April 2026)
 
-| Thema | Offene Frage | Optionen / Klärung |
-|---|---|---|
-| HA 2026.x Zielversion | Welche minimale Zielversion in 2026.x wird offiziell unterstützt? | z.B. 2026.1+ oder 2026.4+ (abhängig von benötigten Core-APIs) |
-| Support-Matrix | Welche Installationsarten werden verbindlich unterstützt? | HA OS / Supervised / Container (und ggf. Einschränkungen dokumentieren) |
-| Setup-Tests (Pflichtgrad) | Welche Tests sind Pflicht vor Abschluss des Setup und welche optional? | Pflicht: Verbindungs-/Scope-Checks; optional: 1-sat Live-Testzahlung |
-| Live-Testzahlung | Soll die 1-sat Testzahlung im Wizard standardmäßig angeboten oder nur optional gezeigt werden? | Standardmäßig optional mit klarer Risiko-/Kosten-Erklärung |
-| Fehlverhalten bei Testfehlern | Darf der Setup trotz Teilfehlern abgeschlossen werden? | Strikter Blocker vs. „mit Warnung fortfahren" je nach Testtyp |
-| Erklärtexte UX | Wie ausführlich sollen Inline-Erklärungen sein? | Kurzmodus (1–2 Sätze) + „Mehr erfahren“-Link |
-| Sprachen im MVP | Welche Sprachen sind zum Start verpflichtend? | Mindestens DE + EN vollständig in Config-/Options-Flow |
-| HACS-Release-Policy | Welche Release-/Versionierungsstrategie wird für HACS verbindlich genutzt? | SemVer + Release Notes + Compatibility-Hinweis pro Release |
+| Thema | Entscheidung |
+|---|---|
+| HA 2026.x Zielversion | **Minimum: Home Assistant 2026.1** |
+| Support-Matrix | **Verbindlich unterstützt:** HA OS, HA Supervised, HA Container. Einschränkungen je Plattform sind im Handbuch dokumentiert: [DE](docs/handbook.de.md#support-matrix-de) / [EN](docs/handbook.en.md#support-matrix-en) |
+| Setup-Tests (Pflichtgrad) | **Pflicht:** Verbindungs- und Scope-Checks. **Optional:** 1-sat Live-Testzahlung |
+| Live-Testzahlung | Wird im Wizard **optional** angezeigt, inklusive klarer Risiko-/Kosten-Erklärung |
+| Fehlverhalten bei Testfehlern | Setup darf bei Teilfehlern **mit Warnung fortgesetzt** werden (kein harter Blocker im MVP) |
+| Erklärtexte UX | Kurzmodus (1–2 Sätze) + „Mehr erfahren“-Link zu passendem Handbuch-Abschnitt |
+| Sprachen im MVP | **Pflicht:** DE + EN vollständig im Config-/Options-Flow; weitere Sprachen folgen später |
+| HACS-Release-Policy | Versionierung ab **0.0.0** im Format **x.y.z** mit Projektregel: `z = pre-release`, `y = release`, `x = major release`; inkl. Release Notes und Kompatibilitätshinweis je Release |
 
 ---
 
