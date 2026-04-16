@@ -40,10 +40,10 @@ url_decode() {
 
     while (( i < len )); do
         c="${encoded:i:1}"
-        if [ "${c}" = "%" ] && (( i + 3 <= len )); then
+        if [ "${c}" = "%" ] && (( i + 2 < len )); then
             hex="${encoded:i+1:2}"
             if echo "${hex}" | grep -Eq '^[0-9A-Fa-f]{2}$'; then
-                printf -v char "\\$(printf '%03o' "$((16#${hex}))")"
+                printf -v char "\\x${hex}"
                 decoded+="${char}"
                 i=$((i + 3))
                 continue
