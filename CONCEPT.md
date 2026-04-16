@@ -476,7 +476,80 @@ Pocket ist ein EU-regulierter Bitcoin-Dienst für SEPA-Überweisungen:
 
 ---
 
-##### Option C: Exchange → Lightning (für Nutzer mit Exchange-Account)
+##### Option C: Strike – Kaufen, Verkaufen & direkt auf Lightning/On-Chain auszahlen
+
+**[Strike](https://strike.me)** ist eine Bitcoin-App mit besonders tiefer Lightning-Integration.
+Bitcoin wird dort **direkt auf deine Alby-Lightning-Adresse** (z.B. `deinname@alby.me`)
+**oder eine On-Chain-Adresse** ausgezahlt – ohne Umwege über andere Wallets.
+
+###### Verfügbare Einzahlungsmethoden bei Strike (Stand 2025)
+
+| Zahlungsmethode | Verfügbar (Europa) | Details |
+|---|---|---|
+| **SEPA Banküberweisung** | ✅ Ja | Kostenlos, sofort oder 1–2 Werktage je nach Bank |
+| **Instant SEPA** | ✅ Ja | Echtzeit, falls deine Bank es unterstützt |
+| **Kreditkarte / Debitkarte** | ❌ Nein | In Europa aktuell nicht verfügbar |
+| **PayPal** | ❌ Nein | Nicht verfügbar |
+| **Apple Pay / Google Pay** | ❌ Nein | Nicht verfügbar |
+
+> ℹ️ **Länder:** Strike ist für alle **36+ SEPA-Länder** verfügbar, darunter alle EU-Staaten
+> sowie Schweiz, Norwegen, Island, Liechtenstein und das Vereinigte Königreich.
+> Aktuelle Länderliste: [strike.me](https://strike.me)
+
+###### Bitcoin kaufen mit Strike
+
+```
+1. https://strike.me aufrufen → App herunterladen (iOS / Android)
+         │
+         ▼
+2. Account erstellen: E-Mail + Passwort + KYC (Ausweisfoto einmalig)
+         │
+         ▼
+3. Euro einzahlen: Strike-App → „Add Money" → SEPA
+   → Deine persönliche IBAN-Referenz wird angezeigt
+   → Normale Banküberweisung senden (kostenlos)
+         │
+         ▼
+4. Bitcoin kaufen: „Buy" → Betrag in EUR eingeben → Bestätigen
+   → Keine Gebühren auf den Kauf selbst (Strike verdient am Spread)
+         │
+         ▼
+5. Bitcoin auszahlen an Alby Hub:
+   ┌──────────────────────────────────────────────────────────────┐
+   │  Option A: Lightning (sofort, empfohlen)                     │
+   │  Strike → „Send" → „Lightning" → Lightning-Adresse eingeben  │
+   │  → deinname@alby.me eintragen → Betrag → Senden             │
+   │  → Ankunft in Alby Hub: sofort (< 1 Sekunde)               │
+   ├──────────────────────────────────────────────────────────────┤
+   │  Option B: On-Chain (langsamer, für größere Beträge)         │
+   │  Alby Hub → „Receive" → „On-Chain" → Bitcoin-Adresse kopieren│
+   │  Strike → „Send" → „Bitcoin" → Adresse einfügen → Senden    │
+   │  → Ankunft: ca. 30–60 Minuten (1 Bestätigung)              │
+   └──────────────────────────────────────────────────────────────┘
+```
+
+> ✅ **Besonderer Vorteil:** Strike unterstützt **Lightning Addresses** direkt.
+> Du musst keine Invoice erstellen – einfach `deinname@alby.me` eingeben,
+> der Rest passiert automatisch.
+
+###### Bitcoin verkaufen mit Strike (Fiat Offramp)
+
+Strike ermöglicht auch den **Rückweg**: Bitcoin zurück in Euro auf dein Bankkonto.
+
+```
+Strike → „Sell" → Betrag in BTC oder EUR eingeben → Bestätigen
+       │
+       ▼
+„Withdraw to Bank" → IBAN eintragen → Abheben
+   → Ankunft: sofort oder 1–2 Werktage (SEPA)
+```
+
+> 💡 **Strike als vollständiges Ökosystem:** Kaufen, Halten, Senden, Empfangen
+> und Verkaufen – alles in einer App, mit nativer Lightning-Unterstützung.
+
+---
+
+##### Option D: Exchange → Lightning (für Nutzer mit Exchange-Account)
 
 Wenn du bereits Bitcoin auf einer Exchange (z.B. Kraken, Binance) besitzt:
 
@@ -499,14 +572,15 @@ Invoice-String in Exchange einfügen → Bestätigen
 
 ---
 
-##### Empfehlungs-Tabelle für Bitcoin-Erstkauffer
+##### Empfehlungs-Tabelle für Bitcoin-Erstkäufer
 
-| Methode | Geschwindigkeit | Gebühren | KYC | Empfehlung |
-|---|---|---|---|---|
-| MoonPay (in Alby Hub) | Sofort (Karte) | ~2–4 % | Ja | ⭐⭐⭐ Einfachste Option |
-| Pocket (EU SEPA) | Minuten–2h | ~1 % | Ja | ⭐⭐⭐ Günstigste EU-Option |
-| Kraken → Lightning | Sofort nach Kauf | ~0,2–1 % | Ja | ⭐⭐ Für Exchange-Nutzer |
-| Bitcoin.de (DE) | Stunden | variabel | Ja | ⭐ P2P, mehr Aufwand |
+| Methode | Einzahlung | Abheben | Gebühren | KYC | Empfehlung |
+|---|---|---|---|---|---|
+| MoonPay (in Alby Hub) | Karte, SEPA, Apple Pay | Lightning / On-Chain | ~2–4 % | Ja | ⭐⭐⭐ Einfachste Option |
+| Pocket (EU SEPA) | SEPA | Lightning-Adresse / On-Chain | ~1 % | Ja | ⭐⭐⭐ Günstigste EU-Option |
+| **Strike** | **SEPA (kostenlos)** | **Lightning-Adresse ✅ · On-Chain ✅** | **~0–1 %** | **Ja** | **⭐⭐⭐ Beste Lightning-Integration** |
+| Kraken → Lightning | Karte, SEPA | Lightning / On-Chain | ~0,2–1,5 % | Ja | ⭐⭐ Für Exchange-Nutzer |
+| Bitcoin.de (DE) | SEPA (P2P) | On-Chain | variabel | Ja | ⭐ P2P, mehr Aufwand |
 
 > ⚠️ **Rechtlicher Hinweis:** Der Kauf von Bitcoin ist in Deutschland und Österreich
 > legal. Bei Gewinnen aus dem Verkauf (nach weniger als einem Jahr Haltedauer) kann
