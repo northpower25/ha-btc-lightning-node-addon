@@ -47,7 +47,7 @@
 - ⬜ ⭐ `custom_components/alby_hub/nwc_client.py` – NWC-Client (Nostr Wallet Connect via WebSocket)
 - ⬜ ⭐ `custom_components/alby_hub/api.py` – Alby Hub lokale HTTP REST API (Expert-Mode)
 - ⬜ ⭐ `custom_components/alby_hub/coordinator.py` – DataUpdateCoordinator (NWC + REST)
-- ⬜ ⭐ `custom_components/alby_hub/config_flow.py` – Setup-Wizard (NWC-String eingeben + validieren)
+- ⬜ ⭐ `custom_components/alby_hub/config_flow.py` – Setup-Wizard (NWC-String eingeben + validieren, inkl. Einsteiger-Hilfe-Link)
 - ⬜ ⭐ `custom_components/alby_hub/sensor.py` – Sensoren (Balance, Kanäle, Preise)
 - ⬜ `custom_components/alby_hub/binary_sensor.py` – Node-Online, Synced, NOSTR
 - ⬜ `custom_components/alby_hub/switch.py` – NOSTR Relay, Safe Mode
@@ -55,10 +55,12 @@
 - ⬜ `custom_components/alby_hub/strings.json` – UI-Texte (Englisch)
 - ⬜ `custom_components/alby_hub/translations/en.json` – Englische Übersetzung
 - ⬜ `custom_components/alby_hub/translations/de.json` – Deutsche Übersetzung
+- ⬜ Config Flow: Einsteiger-Hilfe-Text mit albyhub.com-Link wenn NWC-String fehlt
 - ⬜ NWC-Services via NWC-Client: `make_invoice`, `pay_invoice`, `lookup_invoice`
 - ⬜ NWC-Subscriptions: eingehende Payments als HA-Events (`alby_hub_payment_received`)
 - ⬜ Webhook-Empfänger für HA-Events (`payment_received`, `invoice_paid`, etc.)
 - ⬜ BTC-Preis-Feed (EUR/USD) als Sensor (Quelle: Mempool.space)
+- ⬜ Onboarding-Flow: Automatischer Testschritt nach Setup (1 sat Testzahlung senden/empfangen)
 
 ### C) Dashboard
 

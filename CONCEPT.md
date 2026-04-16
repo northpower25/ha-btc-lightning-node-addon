@@ -8,17 +8,18 @@
 ## Inhaltsverzeichnis
 
 1. [Projektziel](#1-projektziel)
-2. [Architektur-Überblick](#2-architektur-überblick)
-3. [Modul A – Add-on (Core Runtime)](#3-modul-a--add-on-core-runtime)
-4. [Betriebsmodi](#4-betriebsmodi)
-5. [Modul B – HACS Custom Integration](#5-modul-b--hacs-custom-integration)
-6. [Modul C – Dashboard](#6-modul-c--dashboard)
-7. [Modul D – NFC & M2M Payment Layer](#7-modul-d--nfc--m2m-payment-layer)
-8. [Modul E – NOSTR Relay](#8-modul-e--nostr-relay)
-9. [Sicherheits- und Betriebskonzept](#9-sicherheits--und-betriebskonzept)
-10. [Umsetzungsphasen](#10-umsetzungsphasen)
-11. [Zusätzliche Feature-Ideen](#11-zusätzliche-feature-ideen)
-12. [Technische Abhängigkeiten](#12-technische-abhängigkeiten)
+2. [Für Einsteiger: Begriffe & Konzepte einfach erklärt](#2-für-einsteiger-begriffe--konzepte-einfach-erklärt)
+3. [Architektur-Überblick](#3-architektur-überblick)
+4. [Modul A – Add-on (Core Runtime)](#4-modul-a--add-on-core-runtime)
+5. [Betriebsmodi & Vollständiges Onboarding](#5-betriebsmodi--vollständiges-onboarding)
+6. [Modul B – HACS Custom Integration](#6-modul-b--hacs-custom-integration)
+7. [Modul C – Dashboard](#7-modul-c--dashboard)
+8. [Modul D – NFC & M2M Payment Layer](#8-modul-d--nfc--m2m-payment-layer)
+9. [Modul E – NOSTR Relay](#9-modul-e--nostr-relay)
+10. [Sicherheits- und Betriebskonzept](#10-sicherheits--und-betriebskonzept)
+11. [Umsetzungsphasen](#11-umsetzungsphasen)
+12. [Zusätzliche Feature-Ideen](#12-zusätzliche-feature-ideen)
+13. [Technische Abhängigkeiten](#13-technische-abhängigkeiten)
 
 ---
 
@@ -36,7 +37,128 @@ Das Ziel dieses Projekts ist es, jedem Home-Assistant-Nutzer mit minimalem Aufwa
 
 ---
 
-## 2. Architektur-Überblick
+## 2. Für Einsteiger: Begriffe & Konzepte einfach erklärt
+
+> Dieses Kapitel richtet sich an Menschen **ohne Vorkenntnisse** in Bitcoin, Lightning oder
+> Nostr. Du musst diese Konzepte **nicht im Detail verstehen**, um das Add-on zu nutzen –
+> aber eine kurze Erklärung hilft, keine falschen Entscheidungen zu treffen.
+>
+> **Wenn du bereits weißt was Bitcoin, Lightning und NWC ist → direkt zu [Kapitel 5](#5-betriebsmodi--vollständiges-onboarding) springen.**
+
+---
+
+### 2.1 Bitcoin – Digitales Geld ohne Bank
+
+Bitcoin ist digitales Geld, das ohne Bank oder Staat funktioniert. Es gehört niemandem
+und jeder kann es nutzen. Es gibt davon weltweit nur 21 Millionen.
+
+| Begriff | Einfache Erklärung |
+|---|---|
+| **Bitcoin (BTC)** | Die Währung selbst – wie „Euro" oder „Dollar" |
+| **Satoshi (sat)** | Die kleinste Einheit: 1 Bitcoin = 100.000.000 Satoshi. 1 sat ≈ 0,001 Cent (je nach Kurs) |
+| **On-Chain** | Transaktionen direkt auf der Bitcoin-Blockchain – sicher, aber langsam (Minuten bis Stunden) und mit Gebühren |
+| **Self-Custody** | Du hältst deine eigenen Schlüssel → keine Bank, die dein Geld sperren kann |
+| **Seed-Phrase / Recovery Phrase** | 12–24 Wörter, mit denen du dein Wallet wiederherstellen kannst. **Niemals digital speichern, niemals teilen!** |
+
+> 💡 **1.000 sat** entsprechen bei einem BTC-Kurs von 80.000 € ungefähr **0,80 €** –
+> klein genug für Kaffee, Trinkgeld oder einen NFC-Türöffner.
+
+---
+
+### 2.2 Lightning Network – Bitcoin schnell und günstig
+
+Das Lightning Network ist eine **zweite Schicht** über Bitcoin. Es ermöglicht sofortige
+Zahlungen (< 1 Sekunde) für winzige Gebühren (oft < 1 sat).
+
+```
+Du                    Empfänger
+ │                        │
+ │  Lightning Payment     │
+ │─────────────────────►  │
+ │  ⚡ sofort / < 1 sat   │
+```
+
+| Was du brauchst | Was du NICHT brauchst |
+|---|---|
+| Eine Lightning-Wallet (Alby Hub) | Eigenes technisches Wissen |
+| Einen Internetzugang | Eine Bank |
+| Optional: Etwas Bitcoin zum Testen | Teure Hardware (Cloud-Modus) |
+
+> 💡 **Im Cloud-Modus** übernimmt Alby das gesamte technische Lightning-Management
+> für dich. Du musst nichts über Channels, Liquidität oder Routing wissen.
+
+---
+
+### 2.3 Alby Hub – Dein persönlicher Lightning-Knotenpunkt
+
+Alby Hub ist eine **kostenlose Open-Source-Software**, die als dein persönlicher
+Lightning-Assistent fungiert. Er:
+
+- hält deine Bitcoin sicher
+- ermöglicht schnelle Zahlungen
+- stellt eine **Lightning-Adresse** bereit (z.B. `du@alby.me`) – wie eine E-Mail-Adresse,
+  aber zum Geldempfangen
+- verbindet sich mit Apps wie Home Assistant über eine sichere Schnittstelle
+
+Alby Hub kann **von Alby gehostet** (einfach, Cloud-Modus) oder **bei dir zuhause**
+auf dem Home-Assistant-Server betrieben werden (Expert-Modus, volle Kontrolle).
+
+---
+
+### 2.4 Nostr – Nur kurz erklärt (du brauchst es nicht selbst einrichten!)
+
+> ⚠️ **Wichtig vorab:** Im Cloud-Modus mit albyhub.com brauchst du **keinen eigenen
+> Nostr-Account zu erstellen**. Alby Hub erstellt automatisch einen internen Nostr-Schlüssel
+> für die sichere Kommunikation. Du siehst davon nichts und musst nichts tun.
+
+Nostr ist ein offenes Kommunikationsprotokoll – ähnlich wie E-Mail, aber dezentral.
+Alby Hub nutzt Nostr intern für die **NWC-Verschlüsselung** (siehe nächster Abschnitt),
+nicht als soziales Netzwerk.
+
+**Was du wissen musst:** Nichts. Alby Hub kümmert sich um alles.
+
+---
+
+### 2.5 NWC – Die sichere Fernsteuerung deines Wallets
+
+NWC (Nostr Wallet Connect) ist die **sichere Verbindung** zwischen deinem Alby Hub
+und Home Assistant. Stell dir NWC vor wie einen **individuellen Haustürschlüssel**
+für HA – du entscheidest, was HA darf (Guthaben lesen, Rechnungen erstellen, zahlen).
+
+```
+NWC Connection String (Beispiel):
+nostr+walletconnect://abc123...?relay=wss://relay.getalby.com/v1&secret=xyz789...
+```
+
+Dieser String sieht kompliziert aus, ist aber einfach ein **langes Passwort mit
+eingebetteter Server-Adresse**. Du kopierst ihn einmal aus dem Alby Hub Dashboard
+und fügst ihn in Home Assistant ein. Das war's.
+
+**Was du wissen musst:** Diesen String wie ein Passwort behandeln. Nicht teilen.
+
+---
+
+### 2.6 Was du brauchst – Checkliste vor dem Start
+
+#### Für den Cloud-Modus (Empfehlung für Einsteiger)
+
+- [x] **Home Assistant** läuft (mit Supervisor / Add-on-Support)
+- [x] **E-Mail-Adresse** (für Account auf albyhub.com)
+- [x] **Sicheres Passwort** (min. 12 Zeichen, z.B. aus einem Passwort-Manager)
+- [x] **Stift & Papier** (für die Backup-Recovery-Phrase!)
+- [ ] Optional: Kreditkarte / SEPA-Konto (wenn du Bitcoin kaufen möchtest)
+
+#### Was du NICHT brauchst
+
+- ❌ Eigene Hardware für einen Lightning-Node
+- ❌ Kenntnisse über Lightning-Channels oder On-Chain-Transaktionen
+- ❌ Einen Nostr-Account (wird automatisch erstellt)
+- ❌ Bitcoin-Vorwissen
+- ❌ Technisches Hintergrundwissen über Kryptographie
+
+---
+
+## 3. Architektur-Überblick
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
@@ -67,7 +189,7 @@ Das Ziel dieses Projekts ist es, jedem Home-Assistant-Nutzer mit minimalem Aufwa
 
 ---
 
-## 3. Modul A – Add-on (Core Runtime)
+## 4. Modul A – Add-on (Core Runtime)
 
 Das Add-on kapselt den **getAlby Hub** in einem Home-Assistant-Supervisor-Container.
 
@@ -101,7 +223,7 @@ alby-hub-addon/
 
 ---
 
-## 4. Betriebsmodi
+## 5. Betriebsmodi & Vollständiges Onboarding
 
 Das Add-on unterstützt zwei klar getrennte Betriebsmodi, die beim ersten Start ausgewählt werden.
 
@@ -115,8 +237,7 @@ Das Add-on unterstützt zwei klar getrennte Betriebsmodi, die beim ersten Start 
 ### Modus 1: Cloud-Modus – Externer Hub via NWC (Einsteiger)
 
 In diesem Modus läuft **kein eigener Lightning-Node** auf dem HA-Server. Der Nutzer
-verfügt bereits über einen Alby Hub (gehostet auf [albyhub.com](https://albyhub.com)
-oder einem eigenen Server) und verbindet das HA-Add-on über eine NWC-Verbindung.
+verbindet das HA-Add-on mit einem **extern gehosteten Alby Hub** über eine NWC-Verbindung.
 
 ```
 Home Assistant (nur Integration, kein lokaler Hub-Container)
@@ -133,39 +254,266 @@ Home Assistant (nur Integration, kein lokaler Hub-Container)
   Lightning Network
 ```
 
-#### Schritt-für-Schritt: Account & NWC-String bei albyhub.com
+---
+
+#### 5a. Vollständige Einsteiger-Anleitung: Von Null zu Home Assistant + Lightning
+
+> Diese Anleitung begleitet dich Schritt für Schritt – auch wenn du noch **keine
+> Erfahrung mit Bitcoin, Lightning oder Nostr** hast.
+
+---
+
+##### Schritt 1 – Alby Hub Account erstellen
+
+1. Browser öffnen → **[https://albyhub.com](https://albyhub.com)**
+2. Klicke auf **„Get Alby Hub"** oder **„Start for Free"**
+3. Wähle **„Alby Cloud"** (gehostet, einfachste Option für Einsteiger)
+4. **E-Mail-Adresse** eingeben und ein **starkes Passwort** wählen
+   - Empfehlung: mindestens 16 Zeichen, z.B. aus einem Passwort-Manager
+   - Alternativ: Sign-in mit Google-Account möglich
+5. **E-Mail bestätigen** (Link im Posteingang klicken)
+6. Der Hub wird automatisch eingerichtet – das dauert ca. 1–2 Minuten
+
+> 💡 **Kein Nostr-Account nötig!** Alby Hub erstellt intern automatisch einen
+> Nostr-Schlüssel für die verschlüsselte NWC-Kommunikation. Du siehst davon nichts
+> und musst nichts manuell einrichten.
+
+---
+
+##### Schritt 2 – Alby Hub beim ersten Start einrichten (Onboarding Wizard)
+
+Nach dem Login begrüßt dich der **Alby Hub Onboarding Wizard**:
 
 ```
-1. Browser öffnen → https://albyhub.com
-        │
-        ▼
-2. „Get Alby Hub" → Account erstellen
-   (E-Mail + Passwort ODER GitHub/Google Sign-In)
-        │
-        ▼
-3. Hub wird automatisch provisioniert (Alby Cloud-Infrastruktur)
-   Erster Start dauert ca. 1–2 Minuten
-        │
-        ▼
-4. Hub-Dashboard öffnet sich → „Apps" im linken Menü klicken
-        │
-        ▼
-5. „Add Connection" → App-Name eintragen z.B. „Home Assistant"
-   Berechtigungen wählen:
-     ✓ get_info          ← Pflicht (Status-Monitoring)
-     ✓ get_balance       ← Pflicht (Balance-Sensor)
-     ✓ list_transactions ← Pflicht (Zahlungshistorie)
-     ✓ make_invoice      ← Für Invoice-Service
-     ✓ pay_invoice       ← Für Payment-Service (nur Full Access!)
-   Optional: Budget-Limit (z.B. 10.000 sat/Monat) setzen
-        │
-        ▼
-6. QR-Code + Connection-String wird angezeigt:
-   nostr+walletconnect://<wallet-pubkey>?relay=wss://relay.getalby.com/v1&secret=<geheimnis>
-        │
-        ▼
-7. Diesen String als „nwc_connection_string" im HA-Add-on eintragen
+Willkommen-Seite
+      │
+      ▼
+Unlock-Passwort setzen
+  → WICHTIG: Dies ist NICHT dein Login-Passwort
+  → Dieses Passwort entschlüsselt deinen Wallet auf dem Server
+  → Mind. 12 Zeichen, am besten anders als dein Account-Passwort
+  → ⚠ Wenn du es verlierst, verlierst du Zugang zu deinem Wallet!
+      │
+      ▼
+Lightning Address wählen
+  → Du bekommst eine Adresse wie: deinname@alby.me
+  → Damit kannst du genauso einfach Bitcoin empfangen wie E-Mails empfangen
+  → Wähle einen Namen, der dir gehört (prüfen ob verfügbar)
+      │
+      ▼
+Backup-Phrase aufschreiben (KRITISCH!)
+  → 12 englische Wörter werden angezeigt
+  → Diese aufschreiben auf Papier (NICHT digital speichern, NICHT fotografieren)
+  → Mit diesen Wörtern kannst du dein Wallet auf jedem Gerät wiederherstellen
+  → Ohne Backup-Phrase kein Zugriff auf Gelder bei Datenverlust!
+      │
+      ▼
+Backup-Phrase bestätigen
+  → Die Wörter in der richtigen Reihenfolge eingeben
+      │
+      ▼
+Hub ist bereit ✓
 ```
+
+> ⚠️ **Die Backup-Phrase (12 Wörter) ist dein wichtigstes Gut.**
+> Bewahre sie physisch sicher auf – z.B. in einem verschlossenen Umschlag,
+> einem Safe oder auf einer Metallplatte. Niemals als Screenshot oder in der Cloud.
+
+---
+
+##### Schritt 3 – (Optional) Erste Bitcoin kaufen
+
+Wenn du noch keine Bitcoin besitzt, kannst du direkt im Alby Hub kleine Beträge kaufen.
+
+> 👉 Sieh dazu den vollständigen Guide in **[Abschnitt 5b – Erste Bitcoin kaufen](#5b-erste-bitcoin-kaufen)**
+
+---
+
+##### Schritt 4 – NWC-Verbindung für Home Assistant erstellen
+
+Jetzt erstellen wir den Schlüssel, den Home Assistant für die Verbindung braucht:
+
+```
+Hub-Dashboard (https://hub.getalby.com)
+      │
+      ▼
+Linkes Menü: „Apps" klicken
+      │
+      ▼
+„Add Connection" (oder „Neue App verbinden") klicken
+      │
+      ▼
+App-Name eintragen:  Home Assistant
+      │
+      ▼
+Berechtigungen auswählen:
+  ✓ get_info          → Hub-Status anzeigen
+  ✓ get_balance       → Guthaben als HA-Sensor
+  ✓ list_transactions → Zahlungshistorie als HA-Sensor
+  ✓ make_invoice      → Rechnungen aus HA erstellen
+  ✓ pay_invoice       → Zahlungen aus HA senden (Achtung: Ausgaben möglich!)
+
+  Empfehlung für Einsteiger:
+  → Erst NUR die ersten 4 (lesen + Rechnungen erstellen)
+  → pay_invoice erst aktivieren wenn du weißt was du tust
+  → Optional: Monatsbudget setzen z.B. 50.000 sat/Monat
+      │
+      ▼
+„Verbindung erstellen" klicken
+      │
+      ▼
+NWC-Connection-String wird angezeigt:
+  nostr+walletconnect://abc123...?relay=wss://relay.getalby.com/v1&secret=xyz...
+
+  → DIESEN STRING KOPIEREN und sicher aufbewahren
+  → Wie ein Passwort behandeln: Nicht teilen, nicht in Chat/E-Mail schicken
+      │
+      ▼
+String im HA-Add-on unter „nwc_connection_string" eintragen
+```
+
+---
+
+##### Schritt 5 – Home Assistant Add-on installieren & konfigurieren
+
+```
+HA → Einstellungen → Add-ons → Add-on Store
+      │
+      ▼
+Repository hinzufügen:
+  https://github.com/northpower25/ha-btc-lightning-node-addon
+      │
+      ▼
+„Alby Hub" installieren
+      │
+      ▼
+Add-on Konfiguration:
+  node_mode: cloud
+  nwc_connection_string: "nostr+walletconnect://..."  ← hier einfügen
+      │
+      ▼
+Add-on starten → Integration einrichten
+  (HA → Einstellungen → Geräte & Dienste → + Integration → „Alby Hub")
+      │
+      ▼
+Verbindungstest → Entities werden angelegt ✓
+Dashboard wird automatisch erstellt ✓
+```
+
+---
+
+##### Schritt 6 – Alles testen
+
+Empfohlene erste Tests nach der Installation:
+
+| Test | Wie | Erwartetes Ergebnis |
+|---|---|---|
+| **Guthaben-Sensor** | HA Dashboard öffnen | Zeigt aktuelles Lightning-Guthaben in sat |
+| **Erste Rechnung** | Service `lightning.create_invoice` aufrufen (1 sat) | QR-Code + Invoice-String erscheint |
+| **Testzahlung empfangen** | Invoice mit einer anderen Wallet einscannen & zahlen | HA-Event `alby_hub_payment_received` wird ausgelöst |
+| **Mobile Wallet** | Alby Go App installieren, per NWC mit Hub verbinden | Zahlungen auch unterwegs möglich |
+
+---
+
+#### 5b. Erste Bitcoin kaufen
+
+> Dieser Abschnitt gilt für **alle, die noch keine Bitcoin besitzen** oder
+> ihr Wallet aufladen möchten.
+
+---
+
+##### Option A: Direkt in Alby Hub kaufen (einfachste Methode)
+
+Alby Hub integriert **MoonPay** als Zahlungsdienstleister für den Direktkauf:
+
+```
+Hub-Dashboard → „Top Up" → „Card or Bank Transfer"
+      │
+      ▼
+MoonPay auswählen
+      │
+      ▼
+Betrag eingeben (Empfehlung zum Testen: 10–20 €)
+  → Dein Wallet als Empfänger ist bereits vorausgefüllt
+      │
+      ▼
+Zahlungsmethode wählen:
+  ○ Kreditkarte / Debitkarte (sofort, höhere Gebühren)
+  ○ Banküberweisung SEPA (günstiger, 1–2 Tage)
+  ○ Apple Pay / Google Pay
+      │
+      ▼
+Identitätsverifizierung (KYC) – einmalig:
+  → Ausweisfoto + Selfie (wie beim Bankkonto)
+  → Dauert 5–15 Minuten
+  → Wird nur beim ersten Kauf benötigt
+      │
+      ▼
+Zahlung bestätigen → Bitcoin landen in deinem Hub-Wallet
+  (bei Karte: sofort · bei Banküberweisung: wenige Stunden)
+```
+
+> ℹ️ **Gebühren bei MoonPay:** ca. 1–4 % je nach Methode. Für einen ersten Test
+> mit 10 € erhältst du ca. 9,00–9,80 € Gegenwert in sat.
+
+---
+
+##### Option B: EU SEPA-Überweisung über Pocket (günstiger, EU)
+
+Pocket ist ein EU-regulierter Bitcoin-Dienst für SEPA-Überweisungen:
+
+```
+1. https://pocketbitcoin.com aufrufen
+2. „Bitcoin kaufen" → deine Lightning-Adresse eintragen
+   (z.B. deinname@alby.me)
+3. Einen IBAN-Code + Betrag anzeigen
+4. Normale SEPA-Überweisung von deiner Bank senden
+5. Bitcoin werden direkt an dein Alby Hub Wallet geschickt
+   (typisch: wenige Minuten bis 2 Stunden)
+```
+
+**Gebühren:** ca. 1 % · Minimum ca. 25 CHF/EUR · Erreichbar aus: DE, AT, CH, EU
+
+---
+
+##### Option C: Exchange → Lightning (für Nutzer mit Exchange-Account)
+
+Wenn du bereits Bitcoin auf einer Exchange (z.B. Kraken, Binance) besitzt:
+
+```
+Exchange → Abheben → Lightning Network wählen
+      │
+      ▼
+Invoice erstellen in Alby Hub:
+  lightning.create_invoice  (Betrag: gewünschte sat)
+      │
+      ▼
+Invoice-String in Exchange einfügen → Bestätigen
+  → Ankunft in Alby Hub: sofort
+```
+
+> 💡 Nicht alle Exchanges unterstützen Lightning-Auszahlungen.
+> Kraken, River, Bitfinex unterstützen es. Binance: nur On-Chain.
+> Bei On-Chain-Auszahlung: In Alby Hub → „Receive" → „On-Chain-Adresse" nutzen,
+> dann warten (ca. 30–60 Min für On-Chain-Bestätigung).
+
+---
+
+##### Empfehlungs-Tabelle für Bitcoin-Erstkauffer
+
+| Methode | Geschwindigkeit | Gebühren | KYC | Empfehlung |
+|---|---|---|---|---|
+| MoonPay (in Alby Hub) | Sofort (Karte) | ~2–4 % | Ja | ⭐⭐⭐ Einfachste Option |
+| Pocket (EU SEPA) | Minuten–2h | ~1 % | Ja | ⭐⭐⭐ Günstigste EU-Option |
+| Kraken → Lightning | Sofort nach Kauf | ~0,2–1 % | Ja | ⭐⭐ Für Exchange-Nutzer |
+| Bitcoin.de (DE) | Stunden | variabel | Ja | ⭐ P2P, mehr Aufwand |
+
+> ⚠️ **Rechtlicher Hinweis:** Der Kauf von Bitcoin ist in Deutschland und Österreich
+> legal. Bei Gewinnen aus dem Verkauf (nach weniger als einem Jahr Haltedauer) kann
+> Einkommensteuer anfallen. Bei kleinen Beträgen (< 600 € Gewinn pro Jahr) ist dies
+> in Deutschland steuerfrei.
+
+---
 
 - **Voraussetzung:** Account auf [albyhub.com](https://albyhub.com) (kostenlos für Basisplan)
 - **Vorteile:** Kein Channel-Management, keine Hardware, sofort einsatzbereit
@@ -178,6 +526,10 @@ Home Assistant (nur Integration, kein lokaler Hub-Container)
 ---
 
 ### Modus 2: Expert-Modus – Lokaler Hub mit eigener Node (vollständige Self-Custody)
+
+> ⚠️ **Für Einsteiger nicht empfohlen.** Dieser Modus erfordert grundlegendes Verständnis
+> von Lightning-Channels und On-Chain-Bitcoin. **Starte immer zuerst mit dem Cloud-Modus**
+> und wechsle erst dann hierher, wenn du dich vertraut gemacht hast.
 
 In diesem Modus läuft **Alby Hub vollständig lokal** im HA-Add-on-Container. Der Nutzer
 hat die Wahl des Lightning-Backends.
@@ -230,24 +582,47 @@ Der Ablauf ist identisch zum Cloud-Modus, aber das Hub-Dashboard ist unter
 - **Nachteile:** Channel-Management erforderlich, On-chain-Kapital für LN-Channels nötig
 - **Geeignet für:** Fortgeschrittene, Selbst-Hoster, Nutzer mit eigener Node
 
+#### Erste Bitcoin in den lokalen Hub laden (Expert-Modus)
+
+Beim lokalen LDK-Backend brauchst du On-Chain-Bitcoin, um Lightning-Channels zu öffnen:
+
+```
+Methode 1: Receive → On-Chain-Adresse
+  Hub-Dashboard → „Receive" → „On-Chain"
+  → Bitcoin-Adresse erscheint (bc1q...)
+  → Von Exchange oder anderem Wallet senden
+  → Nach 1–3 Bestätigungen (~30 Min) erscheinen sie im Hub
+  → Alby Hub öffnet automatisch einen Lightning-Channel
+
+Methode 2: Boltz Submarine Swap (Lightning → On-Chain → Channel)
+  → Wenn du bereits Lightning-Bitcoin hast
+  → Hub-Dashboard → „Swap" → von Lightning zu On-Chain
+```
+
+> 💡 **LDK empfohlen:** Das eingebettete LDK-Backend öffnet automatisch
+> Lightning-Channels und kümmert sich um Channel-Management. Kein eigener
+> Node-Betrieb nötig.
+
 ---
 
 ### Modus-Vergleichstabelle
 
-| Eigenschaft | Cloud-Modus (albyhub.com) | Expert-Modus (lokal) |
+| Eigenschaft | Cloud-Modus (albyhub.com) | Expert-Modus (lokal/LDK) |
 |---|---|---|
-| Self-Custody | ❌ (Alby Infrastruktur) | ✅ vollständig |
-| Setup-Aufwand | ⭐ minimal (5 Min) | ⭐⭐⭐ mittel-hoch |
-| Channel-Management | automatisch von Alby | manuell |
-| Kapital erforderlich | nein | ja (für LN-Channels) |
+| Self-Custody | ⚠️ Eingeschränkt (Alby Infrastruktur) | ✅ vollständig |
+| Setup-Aufwand | ⭐ minimal (15 Min, inkl. Bitcoin-Kauf) | ⭐⭐⭐ mittel-hoch |
+| Vorwissen nötig | ❌ keins | ⚠️ Lightning-Grundlagen |
+| Channel-Management | automatisch von Alby | automatisch via LDK |
+| Kapital erforderlich | nein | ja (für LN-Channels, mind. ~50.000 sat) |
 | Offline-Betrieb | eingeschränkt | vollständig |
 | Datenschutz | eingeschränkt | vollständig |
 | HA-Hardware-Anforderungen | minimal | mittel (mind. 4 GB RAM) |
-| Empfehlung | Einsteiger / Testen | Fortgeschrittene |
+| Bitcoin kaufen | ✅ direkt in Alby Hub (MoonPay) | ⚠️ über Exchange + On-Chain |
+| **Empfehlung** | **Einsteiger / Testen** | **Fortgeschrittene** |
 
 ---
 
-### 4a. NWC – Nostr Wallet Connect: Technischer Hintergrund
+### 5c. NWC – Nostr Wallet Connect: Technischer Hintergrund
 
 NWC ist das primäre API-Protokoll von Alby Hub. Es ist ein offenes Protokoll
 ([nwc.dev](https://nwc.dev)) zum sicheren Steuern von Lightning-Wallets.
@@ -307,7 +682,7 @@ Bei lokalem Hub kann `ws://localhost:7447/v1` als Relay verwendet werden
 
 ---
 
-### 4b. Lokale HTTP REST API (nur Expert-Modus / lokaler Hub)
+### 5d. Lokale HTTP REST API (nur Expert-Modus / lokaler Hub)
 
 Zusätzlich zu NWC bietet der lokale Alby Hub eine **direkte REST API** am Port 8080.
 Diese ermöglicht der HA-Integration schnellere Abfragen ohne Nostr-Relay-Latenz.
@@ -409,31 +784,45 @@ cln_rune: ""
 
 ---
 
-## 5. Modul B – HACS Custom Integration
+## 6. Modul B – HACS Custom Integration
 
 Die Integration koppelt Home Assistant direkt an die Alby Hub API und stellt Entities, Services und Events bereit.
 
 ### Config Flow
 
+Der Setup-Wizard führt auch absolute Einsteiger durch die Verbindung:
+
 ```
-Benutzer öffnet "Integration hinzufügen"
+Benutzer öffnet "Integration hinzufügen" → „Alby Hub" suchen
     │
     ▼
-Schritt 1: Add-on-URL eingeben
-           (Standard: http://localhost:8080)
+Schritt 1: Verbindungstyp wählen
+           ○ Cloud-Modus (NWC Connection String von albyhub.com)
+           ○ Expert-Modus (Lokaler Hub, URL eingeben)
+    │
+    ├── Cloud-Modus:
+    │   ▼
+    │   NWC Connection String eingeben
+    │   (aus albyhub.com → Apps → Add Connection → String kopieren)
+    │   → Direkt-Link zur Anleitung: [Wie bekomme ich meinen NWC-String?]
+    │
+    └── Expert-Modus:
+        ▼
+        Hub-URL eingeben (Standard: http://localhost:8080)
+        Verbindungstest
     │
     ▼
-Schritt 2: API-Token eingeben
-           (aus Alby Hub Web UI unter Einstellungen → API)
+Verbindungstest → Wallet-Infos werden abgerufen
     │
     ▼
-Schritt 3: Token-Typ wählen
-           ○ Read-Only (nur Monitoring)
-           ○ Full Access (Payments + Monitoring)
+Bestätigung: Guthaben, Lightning-Adresse, Hub-Version anzeigen
     │
     ▼
-Verbindungstest → Entities werden angelegt → Dashboard wird erstellt
+Entities werden angelegt → Dashboard wird automatisch erstellt ✓
 ```
+
+> 💡 **Einsteiger-Hilfe im Config Flow:** Für Nutzer ohne NWC-Erfahrung wird
+> eine inline-Anleitung mit direktem Link zu albyhub.com angezeigt.
 
 ### Entities
 
@@ -512,7 +901,7 @@ lightning.create_backup:
 
 ---
 
-## 6. Modul C – Dashboard
+## 7. Modul C – Dashboard
 
 Das Lovelace-Dashboard wird automatisch beim ersten Verbinden der Integration angelegt.
 
@@ -550,7 +939,7 @@ Das Lovelace-Dashboard wird automatisch beim ersten Verbinden der Integration an
 
 ---
 
-## 7. Modul D – NFC & M2M Payment Layer
+## 8. Modul D – NFC & M2M Payment Layer
 
 ### NFC-Workflow
 
@@ -594,7 +983,7 @@ HA NFC-Automation ausgelöst
 
 ---
 
-## 8. Modul E – NOSTR Relay
+## 9. Modul E – NOSTR Relay
 
 ### Funktionen
 
@@ -612,7 +1001,7 @@ Ermöglicht `user@homeassistant.local` als NOSTR-Identität im eigenen Heimnetz.
 
 ---
 
-## 9. Sicherheits- und Betriebskonzept
+## 10. Sicherheits- und Betriebskonzept
 
 ### Secrets-Management
 
@@ -648,7 +1037,7 @@ Ermöglicht `user@homeassistant.local` als NOSTR-Identität im eigenen Heimnetz.
 
 ---
 
-## 10. Umsetzungsphasen
+## 11. Umsetzungsphasen
 
 ### Phase 1 – MVP (Ziel: lauffähiges Produkt)
 
@@ -685,7 +1074,7 @@ Ermöglicht `user@homeassistant.local` als NOSTR-Identität im eigenen Heimnetz.
 
 ---
 
-## 11. Zusätzliche Feature-Ideen
+## 12. Zusätzliche Feature-Ideen
 
 | Feature | Beschreibung | Phase |
 |---|---|---|
@@ -701,7 +1090,7 @@ Ermöglicht `user@homeassistant.local` als NOSTR-Identität im eigenen Heimnetz.
 
 ---
 
-## 12. Technische Abhängigkeiten
+## 13. Technische Abhängigkeiten
 
 | Komponente | Technologie | Lizenz |
 |---|---|---|
