@@ -18,6 +18,57 @@
   - unerwartete Kosten durch Routing-/Fee-Dynamik
 - Du bist selbst für die **verantwortungsvolle Nutzung** des Add-ons und der zugehörigen Integration verantwortlich.
 
+## Update-Sicherheit: Was du **vor jedem Update** sichern musst
+
+Vor jedem Add-on-Update gilt: erst sichern, dann aktualisieren.
+
+### Pflicht-Checkliste vor Update
+
+- Vollständiges Home-Assistant-Backup erstellen (inkl. Add-on-Daten und Add-on-Konfiguration).
+- Sicherstellen, dass folgende Werte dokumentiert und wieder verfügbar sind:
+  - `node_mode`, `node_backend`, `bitcoin_network`
+  - `nwc_connection_string` (Cloud-Modus bzw. erzeugte App-Verbindung)
+  - `backup_passphrase` (falls gesetzt)
+  - `hub_unlock_password` (falls gesetzt)
+  - Backend-Zugangsdaten (`lnd_*`, `cln_*`, `phoenixd_*`) falls genutzt
+- Bei externen Backends zusätzlich deren eigene Wallet-/Node-Backups prüfen (z. B. LND/CLN/Phoenixd/Cashu nach Hersteller-/Node-Doku).
+- Nach Backup kurz verifizieren, dass Restore-Dateien und Passwörter tatsächlich lesbar/verfügbar sind.
+
+Wenn diese Daten nicht verfügbar sind, kann eine Wiederherstellung nach fehlgeschlagenem Update oder Neuinstallation scheitern.
+
+## Wo liegen die Funds? (szenarioabhängig)
+
+### Cloud-Modus (`node_mode: cloud`)
+
+- Funds liegen **nicht** im Add-on, sondern im externen Alby Hub Konto/Wallet.
+- Kritisch für Recovery: Zugriff auf externes Hub-Konto und NWC-Verbindung/Secrets.
+
+### Expert-Modus mit lokalem LDK
+
+- Funds/Wallet-Zustand werden lokal durch Alby Hub im persistenten Add-on-Datenbereich gehalten.
+- Kritisch für Recovery: funktionierendes HA-Backup inkl. Add-on-Daten + bekannte Passphrasen/Unlock-Daten.
+
+### Expert-Modus mit externem Backend (LND, CLN, Phoenixd, Cashu)
+
+- Funds liegen primär im jeweiligen Backend-System.
+- Das Add-on hält vor allem Verbindungsdaten/Secrets.
+- Kritisch für Recovery: Node-Backups des Backends + Add-on-Config/Credentials.
+
+## Recovery nach fehlgeschlagenem Update oder Neuinstallation
+
+1. Add-on neu installieren (gleiche/kompatible Version wählen).
+2. Gesicherte Add-on-Daten und Add-on-Konfiguration wiederherstellen.
+3. Betriebsmodus korrekt setzen (`cloud` oder `expert`) und alle Secrets/Credentials eintragen.
+4. Cloud-Modus: NWC-Verbindung prüfen/neu erzeugen.  
+   Expert-Modus: Backend-Verbindung und Unlock prüfen.
+5. In der Integration Verbindungstest und Saldo/Info-Prüfung durchführen.
+
+Wenn Funds nach Recovery nicht sichtbar sind:
+
+- Cloud-Modus: zuerst externes Alby Hub Konto prüfen.
+- Expert + externes Backend: zuerst im Backend-System prüfen.
+- Expert + LDK lokal: Restore-Stand und Passphrase/Unlock-Daten prüfen.
+
 ## Zielversion und Kompatibilität
 
 - Minimale unterstützte Home-Assistant-Version (2026.x): **2026.1**
