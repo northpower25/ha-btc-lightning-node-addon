@@ -18,6 +18,57 @@
   - unexpected costs caused by routing/fee dynamics
 - You are solely responsible for the **safe and responsible use** of the add-on and the related integration.
 
+## Update Safety: What you must back up **before every update**
+
+For every add-on update: back up first, update second.
+
+### Mandatory pre-update checklist
+
+- Create a full Home Assistant backup (including add-on data and add-on configuration).
+- Ensure the following values are documented and available:
+  - `node_mode`, `node_backend`, `bitcoin_network`
+  - `nwc_connection_string` (cloud mode and/or generated app connection)
+  - `backup_passphrase` (if set)
+  - `hub_unlock_password` (if set)
+  - Backend credentials (`lnd_*`, `cln_*`, `phoenixd_*`) if used
+- For external backends, also verify their own wallet/node backups (for example LND/CLN/Phoenixd/Cashu per backend documentation).
+- After backup, quickly verify restore files and passphrases are actually readable/available.
+
+If this data is missing, recovery after a failed update or reinstallation may fail.
+
+## Where are your funds? (depends on scenario)
+
+### Cloud mode (`node_mode: cloud`)
+
+- Funds are **not** stored in the add-on; they are in the external Alby Hub account/wallet.
+- Recovery-critical: access to the external hub account and NWC connection/secrets.
+
+### Expert mode with local LDK
+
+- Funds/wallet state are managed locally by Alby Hub in the persistent add-on data area.
+- Recovery-critical: working HA backup including add-on data + known passphrase/unlock data.
+
+### Expert mode with external backend (LND, CLN, Phoenixd, Cashu)
+
+- Funds are primarily in the respective backend system.
+- The add-on mainly stores connection data and secrets.
+- Recovery-critical: backend node backups + add-on config/credentials.
+
+## Recovery after failed update or reinstallation
+
+1. Reinstall the add-on (use the same/compatible version).
+2. Restore backed-up add-on data and add-on configuration.
+3. Set the correct operating mode (`cloud` or `expert`) and re-apply all secrets/credentials.
+4. Cloud mode: verify/recreate NWC connection.  
+   Expert mode: verify backend connection and unlock flow.
+5. In the integration, run connectivity checks and verify balance/info.
+
+If funds are not visible after recovery:
+
+- Cloud mode: check the external Alby Hub account first.
+- Expert + external backend: check the backend system first.
+- Expert + local LDK: check restore state and passphrase/unlock data.
+
 ## Target Version and Compatibility
 
 - Minimum supported Home Assistant version (2026.x): **2026.1**

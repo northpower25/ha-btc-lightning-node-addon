@@ -46,6 +46,21 @@ Dieses Add-on stellt Alby Hub für Home Assistant bereit.
    Expert-Modus: Hub über Ingress öffnen, initial entsperren, NWC-Verbindung in `Apps` erzeugen
 3. Danach Home-Assistant-Integration mit dem NWC-String verbinden
 
+## Update- und Backup-Pflicht vor jedem Update
+
+- Erstelle vor jedem Update ein vollständiges Home-Assistant-Backup.
+- Stelle sicher, dass Modus- und Zugangsdaten verfügbar sind (`node_mode`, `node_backend`, `bitcoin_network`, `nwc_connection_string`, `backup_passphrase`, `hub_unlock_password`, ggf. `lnd_*`/`cln_*`/`phoenixd_*`).
+- Bei externen Backends (LND/CLN/Phoenixd/Cashu) zusätzlich immer die jeweiligen Node-/Wallet-Backups prüfen.
+- Erst updaten, wenn du sicher bist, dass du im Fehlerfall neu installieren und wiederherstellen kannst.
+
+## Wo liegen deine Funds?
+
+- **Cloud-Modus:** Funds liegen im externen Alby Hub Konto/Wallet (nicht im Add-on).
+- **Expert + LDK lokal:** Funds liegen im lokalen, persistenten Add-on-Datenbestand von Alby Hub.
+- **Expert + externes Backend:** Funds liegen primär im jeweiligen Backend-System; Add-on hält vor allem Verbindungsdaten/Secrets.
+
+Wenn ein Update fehlschlägt: Add-on neu installieren, Backups wiederherstellen, Modus/Credentials korrekt setzen, Verbindung testen.
+
 ## Fehlerbilder
 
 - `missing required 'relay' query parameter`: NWC-String ohne Relay-Parameter
