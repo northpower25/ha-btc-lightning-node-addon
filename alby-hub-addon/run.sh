@@ -5,12 +5,13 @@ set -e
 # Read add-on options (injected by HA Supervisor)
 # ──────────────────────────────────────────────
 NODE_MODE=$(bashio::config 'node_mode')
-LOG_LEVEL=$(bashio::config 'log_level')
-TOR_ENABLED=$(bashio::config 'tor_enabled')
-TOR_SOCKS5_URL=$(bashio::config 'tor_socks5_url')
-NOSTR_RELAY_ENABLED=$(bashio::config 'nostr_relay_enabled')
-BACKUP_PASSPHRASE=$(bashio::config 'backup_passphrase')
-EXTERNAL_ACCESS_ENABLED=$(bashio::config 'external_access_enabled')
+LOG_LEVEL=$(bashio::config 'log_level' 'info')
+BACKUP_PASSPHRASE=$(bashio::config 'backup_passphrase' '')
+# Optional fields – hidden behind the "Show unused optional config options" toggle
+TOR_ENABLED=$(bashio::config 'tor_enabled' 'false')
+TOR_SOCKS5_URL=$(bashio::config 'tor_socks5_url' 'socks5h://127.0.0.1:9050')
+NOSTR_RELAY_ENABLED=$(bashio::config 'nostr_relay_enabled' 'false')
+EXTERNAL_ACCESS_ENABLED=$(bashio::config 'external_access_enabled' 'false')
 
 bashio::log.info "Starting Alby Hub add-on..."
 bashio::log.info "  Mode      : ${NODE_MODE}"
@@ -229,9 +230,9 @@ if [ "${NODE_MODE}" = "cloud" ]; then
 #   4. NWC-String kopieren und in der HA-Integration eintragen
 # ──────────────────────────────────────────────
 elif [ "${NODE_MODE}" = "expert" ]; then
-    NODE_BACKEND=$(bashio::config 'node_backend')
-    BITCOIN_NETWORK=$(bashio::config 'bitcoin_network')
-    HUB_UNLOCK_PASSWORD=$(bashio::config 'hub_unlock_password')
+    NODE_BACKEND=$(bashio::config 'node_backend' 'LDK')
+    BITCOIN_NETWORK=$(bashio::config 'bitcoin_network' 'mainnet')
+    HUB_UNLOCK_PASSWORD=$(bashio::config 'hub_unlock_password' '')
 
     bashio::log.info "Running in EXPERT MODE (local Alby Hub)"
     bashio::log.info "  Backend   : ${NODE_BACKEND}"
@@ -252,9 +253,9 @@ elif [ "${NODE_MODE}" = "expert" ]; then
         bashio::log.info "  Using embedded LDK backend (no external node required)."
         ;;
       LND)
-        LND_REST_URL=$(bashio::config 'lnd_rest_url')
-        LND_MACAROON_HEX=$(bashio::config 'lnd_macaroon_hex')
-        LND_TLS_CERT=$(bashio::config 'lnd_tls_cert')
+        LND_REST_URL=$(bashio::config 'lnd_rest_url' '')
+        LND_MACAROON_HEX=$(bashio::config 'lnd_macaroon_hex' '')
+        LND_TLS_CERT=$(bashio::config 'lnd_tls_cert' '')
         if [ -z "${LND_REST_URL}" ] || [ -z "${LND_MACAROON_HEX}" ]; then
             bashio::log.error "LND backend requires 'lnd_rest_url' and 'lnd_macaroon_hex'!"
             exit 1
@@ -265,8 +266,8 @@ elif [ "${NODE_MODE}" = "expert" ]; then
         bashio::log.info "  LND URL   : ${LND_REST_URL}"
         ;;
       CLN)
-        CLN_REST_URL=$(bashio::config 'cln_rest_url')
-        CLN_RUNE=$(bashio::config 'cln_rune')
+        CLN_REST_URL=$(bashio::config 'cln_rest_url' '')
+        CLN_RUNE=$(bashio::config 'cln_rune' '')
         if [ -z "${CLN_REST_URL}" ] || [ -z "${CLN_RUNE}" ]; then
             bashio::log.error "CLN backend requires 'cln_rest_url' and 'cln_rune'!"
             exit 1
@@ -276,8 +277,8 @@ elif [ "${NODE_MODE}" = "expert" ]; then
         bashio::log.info "  CLN URL   : ${CLN_REST_URL}"
         ;;
       Phoenixd)
-        PHOENIXD_URL=$(bashio::config 'phoenixd_url')
-        PHOENIXD_PASSWORD=$(bashio::config 'phoenixd_password')
+        PHOENIXD_URL=$(bashio::config 'phoenixd_url' '')
+        PHOENIXD_PASSWORD=$(bashio::config 'phoenixd_password' '')
         if [ -z "${PHOENIXD_URL}" ] || [ -z "${PHOENIXD_PASSWORD}" ]; then
             bashio::log.error "Phoenixd backend requires 'phoenixd_url' and 'phoenixd_password'!"
             exit 1
