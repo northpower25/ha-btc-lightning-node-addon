@@ -92,31 +92,47 @@ If funds are not visible after recovery:
 
 ### Option A: Install with HACS (recommended for the integration)
 
+#### A1) Install the add-on (first)
+
+1. **Add the add-on repository**  
+   Home Assistant → Settings → Add-ons → Add-on Store → menu (⋮) → Repositories  
+   Add URL: `https://github.com/northpower25/ha-btc-alby-hub-addon`
+2. **Install/start the add-on**  
+   Open “Alby Hub (Bitcoin Lightning)”, install, and start it.
+3. **Configure the add-on**  
+   Then complete the section “Configure the add-on (step by step)”.
+
+#### A2) Install the integration (afterwards)
+
 1. **Install HACS** (if not already installed) and restart Home Assistant.
 2. **Add the integration repository**  
    In HACS, add a custom repository:  
    `https://github.com/northpower25/ha-btc-alby-hub-integration` (Category: Integration)
 3. **Install the integration** and restart Home Assistant.
-4. **Add the add-on repository**  
-   Home Assistant → Settings → Add-ons → Add-on Store → menu (⋮) → Repositories  
-   Add URL: `https://github.com/northpower25/ha-btc-alby-hub-addon`
-5. **Install the add-on**  
-   Open “Alby Hub (Bitcoin Lightning)”, install, and start it.
-6. **Set up the integration**  
+4. **Set up the integration**  
    Settings → Devices & Services → Add Integration → select Alby Hub integration.
 
 ### Option B: Manual installation (without HACS)
+
+#### B1) Install the add-on manually (first)
+
+1. **Provide the add-on**
+   - Either add the add-on repository in Add-on Store (same as Option A, A1), or
+   - for local development, copy the add-on folder to  
+     `/addons/local/alby-hub-addon/` and reload Supervisor.
+2. **Install/start the add-on**  
+   Open the add-on in Add-on Store, install, and start it.
+3. **Configure the add-on**  
+   Then complete the section “Configure the add-on (step by step)”.
+
+#### B2) Install the integration manually (afterwards)
 
 1. **Install the integration manually**
    - Download the `ha-btc-alby-hub-integration` repository ZIP.
    - Extract and copy the custom component folder to  
      `/config/custom_components/`.
    - Restart Home Assistant.
-2. **Install the add-on manually**
-   - Either add the add-on repository in Add-on Store (same as Option A, step 4), or
-   - for local development, copy the add-on folder to  
-     `/addons/local/alby-hub-addon/` and reload Supervisor.
-3. **Install/start the add-on** and then add the integration in “Devices & Services”.
+2. **Add the integration in “Devices & Services”**.
 
 ### Configure the add-on (step by step)
 

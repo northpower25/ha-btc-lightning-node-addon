@@ -92,31 +92,47 @@ Wenn Funds nach Recovery nicht sichtbar sind:
 
 ### Option A: Installation mit HACS (empfohlen für die Integration)
 
+#### A1) Add-on installieren (zuerst)
+
+1. **Add-on-Repository hinzufügen**  
+   Home Assistant → Einstellungen → Add-ons → Add-on-Store → Menü (⋮) → Repositories  
+   URL eintragen: `https://github.com/northpower25/ha-btc-alby-hub-addon`
+2. **Add-on installieren/starten**  
+   Add-on „Alby Hub (Bitcoin Lightning)“ öffnen, installieren, starten.
+3. **Add-on konfigurieren**  
+   Anschließend den Abschnitt „Add-on konfigurieren (Schritt für Schritt)“ durchführen.
+
+#### A2) Integration installieren (danach)
+
 1. **HACS installieren** (falls noch nicht vorhanden) und Home Assistant neu starten.
-2. **Integration hinzufügen**  
+2. **Integration-Repository hinzufügen**  
    In HACS unter „Custom repositories“ hinzufügen:  
    `https://github.com/northpower25/ha-btc-alby-hub-integration` (Kategorie: Integration)
 3. **Integration installieren** und Home Assistant neu starten.
-4. **Add-on-Repository hinzufügen**  
-   Home Assistant → Einstellungen → Add-ons → Add-on-Store → Menü (⋮) → Repositories  
-   URL eintragen: `https://github.com/northpower25/ha-btc-alby-hub-addon`
-5. **Add-on installieren**  
-   Add-on „Alby Hub (Bitcoin Lightning)“ öffnen, installieren, starten.
-6. **Integration einrichten**  
+4. **Integration einrichten**  
    Einstellungen → Geräte & Dienste → Integration hinzufügen → Alby Hub Integration auswählen.
 
 ### Option B: Manuelle Installation (ohne HACS)
+
+#### B1) Add-on manuell installieren (zuerst)
+
+1. **Add-on bereitstellen**
+   - Entweder als Repository im Add-on-Store eintragen (wie in Option A, A1), oder
+   - für lokale Entwicklung den Add-on-Ordner nach  
+     `/addons/local/alby-hub-addon/` kopieren und den Supervisor neu laden.
+2. **Add-on installieren/starten**  
+   Add-on im Add-on-Store öffnen, installieren, starten.
+3. **Add-on konfigurieren**  
+   Anschließend den Abschnitt „Add-on konfigurieren (Schritt für Schritt)“ durchführen.
+
+#### B2) Integration manuell installieren (danach)
 
 1. **Integration manuell installieren**
    - Repository `ha-btc-alby-hub-integration` als ZIP herunterladen.
    - Entpacken und den Ordner der Custom Component nach  
      `/config/custom_components/` kopieren.
    - Home Assistant neu starten.
-2. **Add-on manuell installieren**
-   - Entweder als Repository im Add-on-Store eintragen (wie in Option A, Schritt 4), oder
-   - für lokale Entwicklung den Add-on-Ordner nach  
-     `/addons/local/alby-hub-addon/` kopieren und den Supervisor neu laden.
-3. **Add-on installieren/starten** und anschließend die Integration in „Geräte & Dienste“ hinzufügen.
+2. **Integration in „Geräte & Dienste“ hinzufügen**.
 
 ### Add-on konfigurieren (Schritt für Schritt)
 
