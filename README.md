@@ -18,7 +18,8 @@ Dieses Repository stellt ein Home Assistant Add-on bereit, mit dem du **Bitcoin-
 - **Expert-Modus**  
   Lokaler Betrieb von Alby Hub mit eigenem Backend (z. B. LDK, LND, CLN, Phoenixd).
 - **Home Assistant Ingress UI**  
-  Zugriff auf die Hub-Oberfläche direkt in Home Assistant.
+  Expert-Modus: Zugriff auf die lokale Hub-Oberfläche direkt in Home Assistant.  
+  Cloud-Modus: Ingress zeigt eine Info-Seite zur NWC-Bridge (kein lokales Hub-Web-UI).
 - **Optionale Nostr-Relay-Funktion**  
   Aktivierbar für fortgeschrittene Setups.
 - **Konfigurierbare Betriebsoptionen**  
@@ -117,7 +118,7 @@ Vollständige Liste: https://guides.getalby.com/user-guide/alby-hub/alby-hub-fla
 | Add-on-Modus | Einordnung | Was passiert |
 |---|---|---|
 | `node_mode: expert` | **Umbrel / Start9 / etc. – für Home Assistant** | Alby Hub läuft vollständig im Add-on auf deinem HA-System. Home Assistant ist die Hosting-Plattform. |
-| `node_mode: cloud` | **Kein eigener Hub-Betrieb** | Das Add-on läuft als NWC-Bridge zu einem Hub, der woanders läuft (z. B. Alby Cloud oder selbst-gehostet auf Docker/Linux/etc.). |
+| `node_mode: cloud` | **Kein eigener Hub-Betrieb** | Das Add-on läuft als NWC-Bridge zu einem Hub, der woanders läuft (z. B. Alby Cloud oder selbst-gehostet auf Docker/Linux/etc.); Ingress zeigt dabei eine Info-Seite statt lokalem Hub-Web-UI. |
 
 **Innerhalb von Expert Mode – Backend-Auswahl:**
 

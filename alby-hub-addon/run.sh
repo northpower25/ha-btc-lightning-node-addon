@@ -136,6 +136,51 @@ check_ws_relay_reachability() {
     return 1
 }
 
+start_cloud_info_page() {
+    local cloud_ui_dir="/tmp/alby-cloud-ui"
+    local cloud_ui_pid=""
+    mkdir -p "${cloud_ui_dir}"
+    cat > "${cloud_ui_dir}/index.html" <<'EOF'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alby Hub Add-on (Cloud Mode)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; color: #1f2937; }
+    h1 { margin-bottom: 0.5rem; }
+    .box { border: 1px solid #d1d5db; border-radius: 8px; padding: 1rem; background: #f9fafb; }
+    code { background: #e5e7eb; padding: 0.15rem 0.3rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Alby Hub Add-on läuft im Cloud-Modus</h1>
+  <div class="box">
+    <p>Es läuft kein lokaler Alby Hub im Add-on.</p>
+    <p>Dieses Add-on dient als NWC-Bridge zur Home-Assistant-Integration.</p>
+    <p>Die eigentliche Hub-Oberfläche liegt auf deinem externen Hub-System (z. B. https://albyhub.com).</p>
+    <p>Konfiguration: <code>node_mode: cloud</code> + <code>nwc_connection_string</code>.</p>
+  </div>
+</body>
+</html>
+EOF
+
+    if command -v busybox >/dev/null 2>&1; then
+        busybox httpd -f -p "${BIND_ADDRESS}:${PORT}" -h "${cloud_ui_dir}" >/dev/null 2>&1 &
+        cloud_ui_pid=$!
+    elif command -v python3 >/dev/null 2>&1; then
+        python3 -m http.server "${PORT}" --bind "${BIND_ADDRESS}" --directory "${cloud_ui_dir}" >/dev/null 2>&1 &
+        cloud_ui_pid=$!
+    else
+        bashio::log.warning "Cloud mode ingress info page could not be started (missing busybox/python3)."
+        return 1
+    fi
+
+    bashio::log.info "Cloud mode info page is available via Home Assistant Ingress."
+    wait "${cloud_ui_pid}"
+}
+
 # Bind to all interfaces only when external access is requested
 if bashio::var.true "${EXTERNAL_ACCESS_ENABLED}"; then
     export BIND_ADDRESS="0.0.0.0"
@@ -214,8 +259,11 @@ if [ "${NODE_MODE}" = "cloud" ]; then
     # In cloud mode no local hub process runs.
     # The add-on container stays alive to serve as a configuration/secrets store
     # and to forward the NWC string to the HA integration via the supervisor options API.
+    # For HA Ingress we provide a small info page to avoid an empty/blank UI.
     bashio::log.info "Cloud mode: add-on container running as NWC bridge (no local Hub process)."
-    while true; do sleep 60; done
+    if ! start_cloud_info_page; then
+        while true; do sleep 60; done
+    fi
 
 # ──────────────────────────────────────────────
 # Mode: EXPERT – Lokaler Alby Hub mit eigenem Node

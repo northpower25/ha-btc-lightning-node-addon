@@ -42,6 +42,7 @@ Wenn diese Daten nicht verfügbar sind, kann eine Wiederherstellung nach fehlges
 
 - Funds liegen **nicht** im Add-on, sondern im externen Alby Hub Konto/Wallet.
 - Kritisch für Recovery: Zugriff auf externes Hub-Konto und NWC-Verbindung/Secrets.
+- In Home Assistant Ingress wird im Cloud-Modus nur eine Info-Seite angezeigt (kein lokales Hub-Web-UI im Add-on).
 
 ### Expert-Modus mit lokalem LDK
 
@@ -98,7 +99,7 @@ Die offiziellen **Alby Hub Flavors** sind Deployment-Optionen – sie beschreibe
 | Add-on-Modus | Einordnung | Was passiert |
 |---|---|---|
 | `node_mode: expert` | **Umbrel / Start9 / etc. – aber für Home Assistant** | Alby Hub läuft vollständig im Add-on auf dem HA-System. Home Assistant ist die Hosting-Plattform. |
-| `node_mode: cloud` | **Kein eigener Hub im Add-on** | Das Add-on verbindet HA per NWC mit einem Hub, der woanders läuft (z. B. Alby Cloud, Docker, Linux, etc.). |
+| `node_mode: cloud` | **Kein eigener Hub im Add-on** | Das Add-on verbindet HA per NWC mit einem Hub, der woanders läuft (z. B. Alby Cloud, Docker, Linux, etc.); Ingress zeigt dabei eine Info-Seite statt lokalem Hub-Web-UI. |
 
 **Expert-Modus: Backend-Auswahl**
 
@@ -141,7 +142,7 @@ Alby Cloud · Desktop · Docker · Umbrel/Start9/etc. · Linux
 | Add-on-Modus | Einordnung | Was passiert |
 |---|---|---|
 | `node_mode: expert` | **Umbrel / Start9 / etc. – für Home Assistant** | Alby Hub läuft vollständig im Add-on auf dem HA-System. Home Assistant ist die Hosting-Plattform. |
-| `node_mode: cloud` | **Kein eigener Hub im Add-on** | Das Add-on verbindet HA per NWC mit einem Hub, der woanders läuft (z. B. Alby Cloud, eigener Docker-Hub, etc.). |
+| `node_mode: cloud` | **Kein eigener Hub im Add-on** | Das Add-on verbindet HA per NWC mit einem Hub, der woanders läuft (z. B. Alby Cloud, eigener Docker-Hub, etc.); Ingress zeigt dabei eine Info-Seite statt lokalem Hub-Web-UI. |
 
 **Expert-Modus: Backend-Auswahl (BYON – Bring Your Own Node)**
 
@@ -274,6 +275,7 @@ Alby Cloud · Desktop · Docker · Umbrel/Start9/etc. · Linux
 - Nur für Cloud-Modus verpflichtend.
 - Muss mit `nostr+walletconnect://` beginnen und `relay` + `secret` enthalten.
 - Erzeugung: Alby Hub → Apps → Add Connection.
+- Wird in der Add-on-Konfiguration als Passwortfeld maskiert angezeigt.
 
 <a id="addon-setting-bitcoin-network-de"></a>
 ### `bitcoin_network`
