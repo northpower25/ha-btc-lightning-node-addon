@@ -43,11 +43,7 @@ options:
 
   # ── Allgemein ──────────────────────────────────────────────────────────────
   log_level: info
-  tor_enabled: false
-  tor_socks5_url: "socks5h://127.0.0.1:9050"
-  nostr_relay_enabled: false
   backup_passphrase: ""
-  external_access_enabled: false
 
   # ── Cloud-Modus: NWC Connection String ────────────────────────────────────
   # Woher bekomme ich meinen NWC-String?
@@ -67,32 +63,34 @@ options:
   # Phoenixd: externes phoenixd-Backend (phoenixd_url + phoenixd_password erforderlich)
   # Cashu: experimentelles Ecash-Backend (nur für fortgeschrittene Tests)
   node_backend: "LDK"
-  hub_unlock_password: ""
 
-  # LND-Backend (nur bei node_backend = LND)
-  lnd_rest_url: ""
-  lnd_macaroon_hex: ""
-  lnd_tls_cert: ""
-
-  # CLN-Backend (nur bei node_backend = CLN)
-  cln_rest_url: ""
-  cln_rune: ""
-
-  # Phoenixd-Backend (nur bei node_backend = Phoenixd)
-  phoenixd_url: ""
-  phoenixd_password: ""
+  # ── Optionale / fortgeschrittene Einstellungen ───────────────────────────
+  # Die folgenden Felder werden im UI hinter "Nicht verwendete optionale
+  # Konfigurationsoptionen einblenden" verborgen, da sie nur für bestimmte
+  # Setups oder Backends benötigt werden.
+  #
+  # tor_enabled: false               ← aktiviert Tor-Proxy-Routing
+  # tor_socks5_url: socks5h://...    ← Proxy-URL (nur wenn tor_enabled=true)
+  # nostr_relay_enabled: false       ← lokaler NOSTR-Relay (Expert-Modus)
+  # external_access_enabled: false   ← Bind auf 0.0.0.0 (Vorsicht!)
+  # hub_unlock_password: ""          ← Auto-Unlock (Expert-Modus)
+  #
+  # LND: lnd_rest_url, lnd_macaroon_hex, lnd_tls_cert
+  # CLN: cln_rest_url, cln_rune
+  # Phoenixd: phoenixd_url, phoenixd_password
 
 schema:
   node_mode: list(cloud|expert)
-  log_level: list(trace|debug|info|notice|warning|error|fatal)
-  tor_enabled: bool
-  tor_socks5_url: str?
-  nostr_relay_enabled: bool
+  log_level: list(trace|debug|info|notice|warning|error|fatal)?
   backup_passphrase: str?
-  external_access_enabled: bool
   nwc_connection_string: str?
-  bitcoin_network: list(mainnet|testnet|signet|mutinynet)
-  node_backend: list(LDK|LND|CLN|Phoenixd|Cashu)
+  bitcoin_network: list(mainnet|testnet|signet|mutinynet)?
+  node_backend: list(LDK|LND|CLN|Phoenixd|Cashu)?
+  # ── Hinter Toggle versteckt (optional, kein Default in options:) ─────────
+  tor_enabled: bool?
+  tor_socks5_url: str?
+  nostr_relay_enabled: bool?
+  external_access_enabled: bool?
   hub_unlock_password: str?
   lnd_rest_url: str?
   lnd_macaroon_hex: str?
