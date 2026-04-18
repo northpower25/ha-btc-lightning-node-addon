@@ -58,6 +58,9 @@ Dieses Repository stellt ein Home Assistant Add-on bereit, mit dem du **Bitcoin-
 - Schnellstart Installation (DE): [README-Kurzanleitung](#schnellstart-installation-in-home-assistant)
 - Detaillierte Installation & Konfiguration (DE): [docs/handbook.de.md#installation-und-konfiguration-in-home-assistant-hacs--manuell](docs/handbook.de.md#installation-und-konfiguration-in-home-assistant-hacs--manuell)
 - Detailed Installation & Configuration (EN): [docs/handbook.en.md#installation-and-configuration-in-home-assistant-hacs--manual](docs/handbook.en.md#installation-and-configuration-in-home-assistant-hacs--manual)
+- Offizielles Alby Hub Handbuch: https://guides.getalby.com/user-guide/alby-hub
+- Offizieller Alby Hub Getting-Started Guide: https://guides.getalby.com/user-guide/alby-hub/getting-started
+- Offizielle Alby Hub Flavors: https://guides.getalby.com/user-guide/alby-hub/alby-hub-flavors
 - Konzept: [CONCEPT.md](CONCEPT.md)
 - Developer Handbuch (DE): [docs/developer-handbook.de.md](docs/developer-handbook.de.md)
 - Handbuch (DE): [docs/handbook.de.md](docs/handbook.de.md)
@@ -100,13 +103,38 @@ Dieses Repository stellt ein Home Assistant Add-on bereit, mit dem du **Bitcoin-
 > Alby Hub: `https://albyhub.com`  
 > Aktuelle Modelle/Pläne: `https://getalby.com/pricing`
 
-### Welches Alby-Modell passt zu welchem Einsatzzweck?
+### Wo dieses Add-on in den offiziellen Alby-Hub-Flavors einzuordnen ist
 
-| Modell | Geeignet für | Empfehlung |
+Die offiziellen Alby-Hub-Flavors sind Deployment-Optionen – also Wege, **wo** du Alby Hub betreibst:
+- Alby Cloud
+- Desktop
+- Docker
+- Umbrel/Start9/etc.
+- Linux
+
+Vollständige Liste: https://guides.getalby.com/user-guide/alby-hub/alby-hub-flavors
+
+| Add-on-Modus | Einordnung | Was passiert |
 |---|---|---|
-| **Alby Hub Cloud** (gehostet) | Schnellstart ohne eigenen Server/Node, möglichst wenig Betriebsaufwand | Beste Wahl für Einsteiger und schnelle Inbetriebnahme |
-| **Self-Hosted Alby Hub** (eigener Betrieb) | Volle Self-Custody, eigener Stack, mehr Kontrolle | Für fortgeschrittene Nutzer mit eigener Infrastruktur |
-| **Externes eigenes Backend/Wallet (BYOW/BYON)** | Du betreibst bereits LND/CLN/Phoenixd/Cashu und willst Alby nur als Verbindungs-/App-Schicht nutzen | Für bestehende Node-Setups und Integrationsszenarien |
+| `node_mode: expert` | **Umbrel / Start9 / etc. – für Home Assistant** | Alby Hub läuft vollständig im Add-on auf deinem HA-System. Home Assistant ist die Hosting-Plattform. |
+| `node_mode: cloud` | **Kein eigener Hub-Betrieb** | Das Add-on läuft als NWC-Bridge zu einem Hub, der woanders läuft (z. B. Alby Cloud oder selbst-gehostet auf Docker/Linux/etc.). |
+
+**Innerhalb von Expert Mode – Backend-Auswahl:**
+
+| `node_backend` | Bedeutung |
+|---|---|
+| `LDK` | Eingebettetes Lightning-Backend im Hub (empfohlen für Einsteiger) |
+| `LND` / `CLN` / `Phoenixd` / `Cashu` | Alby Hub verbindet sich mit einem bestehenden Node (BYON – Bring Your Own Node) |
+
+### Welcher Alby-Hub-Startpunkt passt zu dir?
+
+Basis: https://guides.getalby.com/user-guide/alby-hub/getting-started
+
+| Option | Geeignet für | Empfehlung |
+|---|---|---|
+| **Alby Cloud** (von Alby gehostet) | Schnellstart ohne eigene Server-Infrastruktur | Beste Wahl für Einsteiger, die keinen Hub selbst hosten möchten |
+| **Expert-Modus dieses Add-ons** (Hub in HA) | Hub direkt in Home Assistant betreiben | Für HA-Nutzer, die Alby Hub lokal auf ihrem HA-System hosten möchten |
+| **Anderer selbst-gehosteter Hub** (Docker, Linux, Umbrel, ...) | Volle Kontrolle, eigene Infrastruktur außerhalb von HA | Für fortgeschrittene Nutzer mit eigener Server-Infrastruktur |
 
 ### Verbindung in Home Assistant einrichten
 

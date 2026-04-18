@@ -2,7 +2,7 @@
 configuration:
   node_mode:
     name: Betriebsmodus
-    description: "Cloud = externer Hub via NWC. Expert = lokaler Hub im Add-on mit eigenem Backend. Handbuch: https://github.com/northpower25/ha-btc-alby-hub-addon/blob/HEAD/docs/handbook.de.md#addon-setting-node-mode-de"
+    description: "Cloud = externer Hub via NWC. Expert = lokaler Hub im Add-on mit eigenem Backend. Offiziell: https://guides.getalby.com/user-guide/alby-hub/alby-hub-flavors. Handbuch: https://github.com/northpower25/ha-btc-alby-hub-addon/blob/HEAD/docs/handbook.de.md#addon-setting-node-mode-de"
   log_level:
     name: Log-Level
     description: "Steuert die Detailtiefe der Logs (Standard: info). Handbuch: https://github.com/northpower25/ha-btc-alby-hub-addon/blob/HEAD/docs/handbook.de.md#addon-setting-log-level-de"
@@ -11,7 +11,7 @@ configuration:
     description: "Optional: verschlüsselt Backups. Sicher aufbewahren. Handbuch: https://github.com/northpower25/ha-btc-alby-hub-addon/blob/HEAD/docs/handbook.de.md#addon-setting-backup-passphrase-de"
   nwc_connection_string:
     name: NWC Connection String
-    description: "Pflicht im Cloud-Modus (nostr+walletconnect://…). Im Expert-Modus nicht nötig. Handbuch: https://github.com/northpower25/ha-btc-alby-hub-addon/blob/HEAD/docs/handbook.de.md#addon-setting-nwc-connection-string-de"
+    description: "Pflicht im Cloud-Modus (nostr+walletconnect://…). Im Expert-Modus nicht nötig. Offizieller Einstieg: https://guides.getalby.com/user-guide/alby-hub/getting-started. Handbuch: https://github.com/northpower25/ha-btc-alby-hub-addon/blob/HEAD/docs/handbook.de.md#addon-setting-nwc-connection-string-de"
   bitcoin_network:
     name: Bitcoin-Netzwerk
     description: "Nur im Expert-Modus relevant. Muss zum gewählten Backend passen. Handbuch: https://github.com/northpower25/ha-btc-alby-hub-addon/blob/HEAD/docs/handbook.de.md#addon-setting-bitcoin-network-de"
