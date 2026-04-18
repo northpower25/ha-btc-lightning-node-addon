@@ -58,6 +58,9 @@ Dieses Repository stellt ein Home Assistant Add-on bereit, mit dem du **Bitcoin-
 - Schnellstart Installation (DE): [README-Kurzanleitung](#schnellstart-installation-in-home-assistant)
 - Detaillierte Installation & Konfiguration (DE): [docs/handbook.de.md#installation-und-konfiguration-in-home-assistant-hacs--manuell](docs/handbook.de.md#installation-und-konfiguration-in-home-assistant-hacs--manuell)
 - Detailed Installation & Configuration (EN): [docs/handbook.en.md#installation-and-configuration-in-home-assistant-hacs--manual](docs/handbook.en.md#installation-and-configuration-in-home-assistant-hacs--manual)
+- Offizielles Alby Hub Handbuch: https://guides.getalby.com/user-guide/alby-hub
+- Offizieller Alby Hub Getting-Started Guide: https://guides.getalby.com/user-guide/alby-hub/getting-started
+- Offizielle Alby Hub Flavors: https://guides.getalby.com/user-guide/alby-hub/alby-hub-flavors
 - Konzept: [CONCEPT.md](CONCEPT.md)
 - Developer Handbuch (DE): [docs/developer-handbook.de.md](docs/developer-handbook.de.md)
 - Handbuch (DE): [docs/handbook.de.md](docs/handbook.de.md)
@@ -102,11 +105,22 @@ Dieses Repository stellt ein Home Assistant Add-on bereit, mit dem du **Bitcoin-
 
 ### Welches Alby-Modell passt zu welchem Einsatzzweck?
 
+Grundlage:
+- Alby Hub Flavors (offiziell): https://guides.getalby.com/user-guide/alby-hub/alby-hub-flavors
+
 | Modell | Geeignet für | Empfehlung |
 |---|---|---|
 | **Alby Hub Cloud** (gehostet) | Schnellstart ohne eigenen Server/Node, möglichst wenig Betriebsaufwand | Beste Wahl für Einsteiger und schnelle Inbetriebnahme |
 | **Self-Hosted Alby Hub** (eigener Betrieb) | Volle Self-Custody, eigener Stack, mehr Kontrolle | Für fortgeschrittene Nutzer mit eigener Infrastruktur |
 | **Externes eigenes Backend/Wallet (BYOW/BYON)** | Du betreibst bereits LND/CLN/Phoenixd/Cashu und willst Alby nur als Verbindungs-/App-Schicht nutzen | Für bestehende Node-Setups und Integrationsszenarien |
+
+### Einordnung dieses Add-ons in die offiziellen Alby-Hub-Flavors
+
+| Add-on-Einstellung | Offizieller Flavor | Bedeutung |
+|---|---|---|
+| `node_mode: cloud` | **Alby Hub Cloud** | Das Add-on arbeitet als NWC-Bridge zu einem extern gehosteten Alby Hub. Kein lokaler Lightning-Node im Add-on. |
+| `node_mode: expert` + `node_backend: LDK` | **Self-Hosted Alby Hub** | Alby Hub läuft lokal im Add-on mit eingebettetem Backend. |
+| `node_mode: expert` + `node_backend: LND/CLN/Phoenixd/Cashu` | **Bring Your Own Node/Wallet (BYON/BYOW)** | Alby Hub läuft im Add-on, Lightning-/Wallet-Backend kommt aus deiner bestehenden externen Infrastruktur. |
 
 ### Verbindung in Home Assistant einrichten
 

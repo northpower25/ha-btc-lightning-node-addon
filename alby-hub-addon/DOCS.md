@@ -31,6 +31,18 @@ Dieses Add-on stellt Alby Hub für Home Assistant bereit.
 - Unterstützte Backends: `LDK`, `LND`, `CLN`, `Phoenixd`, `Cashu`
 - Optionales NOSTR-Relay-Proxy auf Port `3334` (`nostr_relay_enabled: true`)
 
+## Offizielles Alby-Handbuch & Flavors-Zuordnung
+
+- Alby Hub Handbuch: https://guides.getalby.com/user-guide/alby-hub
+- Getting Started: https://guides.getalby.com/user-guide/alby-hub/getting-started
+- Alby Hub Flavors: https://guides.getalby.com/user-guide/alby-hub/alby-hub-flavors
+
+| Add-on-Einstellung | Offizieller Flavor | Bedeutung |
+|---|---|---|
+| `node_mode: cloud` | **Alby Hub Cloud** | Externer gehosteter Hub, angebunden per NWC. Kein lokaler Node im Add-on. |
+| `node_mode: expert` + `node_backend: LDK` | **Self-Hosted Alby Hub** | Hub und Backend laufen lokal im Add-on. |
+| `node_mode: expert` + `node_backend: LND/CLN/Phoenixd/Cashu` | **Bring Your Own Node/Wallet (BYON/BYOW)** | Hub läuft im Add-on, Node/Wallet-Backend ist extern und wird angebunden. |
+
 ## Konfigurationshinweise
 
 - `nwc_connection_string`: Nur im Cloud-Modus erforderlich (`nostr+walletconnect://...`)

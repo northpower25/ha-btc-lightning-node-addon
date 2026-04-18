@@ -80,6 +80,12 @@ If funds are not visible after recovery:
 - **Integration (`ha-btc-alby-hub-integration`)**: Connects Alby Hub to Home Assistant (entities, services, automations, dashboard).
 - Recommendation: On HA OS/Supervised, usually use **add-on + integration** together; on HA Container, primarily use the **integration** with an external hub.
 
+## Alignment with the official Alby handbook
+
+- Alby Hub handbook: https://guides.getalby.com/user-guide/alby-hub
+- Getting started: https://guides.getalby.com/user-guide/alby-hub/getting-started
+- Alby Hub flavors: https://guides.getalby.com/user-guide/alby-hub/alby-hub-flavors
+
 ## Installation and Configuration in Home Assistant (HACS + manual)
 
 ### Prerequisites
@@ -105,6 +111,14 @@ For cloud connectivity in this add-on, you need an Alby account:
 | **Alby Hub Cloud** (hosted) | You want a fast start without running your own server/node | Default choice for beginners and this add-on’s cloud mode |
 | **Self-hosted Alby Hub** | You want self-custody with your own infrastructure and maximum control | Best for advanced users |
 | **Own external backend/wallet (BYOW/BYON)** | You already run LND/CLN/Phoenixd/Cashu and use Alby mainly as an app/connection layer | Best for existing node setups |
+
+#### Where this add-on fits in official Alby Hub flavors
+
+| Add-on setting | Official flavor | Meaning |
+|---|---|---|
+| `node_mode: cloud` | **Alby Hub Cloud** | The add-on acts as an NWC bridge to an externally hosted Alby Hub. |
+| `node_mode: expert` + `node_backend: LDK` | **Self-Hosted Alby Hub** | Alby Hub runs locally in the add-on with an embedded backend. |
+| `node_mode: expert` + `node_backend: LND/CLN/Phoenixd/Cashu` | **Bring Your Own Node/Wallet (BYON/BYOW)** | Alby Hub runs in the add-on while using your existing external backend. |
 
 #### Create NWC and use it in the add-on
 
