@@ -105,7 +105,8 @@ If funds are not visible after recovery:
 3. **Verify the repository entry**  
    Ensure the repository appears in the list, then close the dialog.
 4. **Install/start the add-on**  
-   Open “Alby Hub (Bitcoin Lightning)”, install, and start it.
+   Open “Alby Hub (Bitcoin Lightning)”, install, and start it.  
+   On first installation, Supervisor may need a few minutes because the add-on image is built locally from this repository.
 5. **Configure the add-on**  
    Then complete the section “Configure the add-on (step by step)”.
 

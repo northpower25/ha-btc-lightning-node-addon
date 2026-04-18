@@ -79,7 +79,8 @@ Dieses Repository stellt ein Home Assistant Add-on bereit, mit dem du **Bitcoin-
    - Mit **Hinzufügen** bestätigen.
 3. **Prüfen, dass das Repository gelistet ist**  
    Das Repository muss anschließend in der Repositories-Liste sichtbar sein; Dialog schließen.
-4. **Add-on „Alby Hub“ installieren und starten**
+4. **Add-on „Alby Hub“ installieren und starten**  
+   Beim ersten Installationslauf kann der Supervisor einige Minuten benötigen, da das Add-on-Image lokal aus dem Repository gebaut wird.
 5. **Add-on konfigurieren**  
    - `node_mode: cloud` mit `nwc_connection_string`, oder  
    - `node_mode: expert` mit lokalem/externem Backend

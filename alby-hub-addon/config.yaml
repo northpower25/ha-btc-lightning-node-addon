@@ -113,4 +113,3 @@ environment:
   CLN_RUNE: "{{cln_rune}}"
   PHOENIXD_URL: "{{phoenixd_url}}"
   PHOENIXD_PASSWORD: "{{phoenixd_password}}"
-image: "ghcr.io/northpower25/ha-alby-hub/{arch}"
