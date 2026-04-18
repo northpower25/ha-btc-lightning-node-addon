@@ -1,6 +1,6 @@
 ---
 name: Alby Hub (Bitcoin Lightning)
-version: "0.0.6"
+version: "0.0.7"
 slug: alby_hub
 description: >
   Self-custody Bitcoin Lightning Node powered by Alby Hub. BETA WARNING:
@@ -83,7 +83,7 @@ schema:
   node_mode: list(cloud|expert)
   log_level: list(trace|debug|info|notice|warning|error|fatal)?
   backup_passphrase: str?
-  nwc_connection_string: str?
+  nwc_connection_string: password?
   bitcoin_network: list(mainnet|testnet|signet|mutinynet)?
   node_backend: list(LDK|LND|CLN|Phoenixd|Cashu)?
   # ── Experten-/Node-Optionen hinter UI-Toggle (kein Default in options:) ───

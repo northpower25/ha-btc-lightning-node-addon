@@ -24,6 +24,7 @@ Dieses Add-on stellt Alby Hub für Home Assistant bereit.
 - Kein lokaler Lightning-Node im Add-on
 - Verbindung über `nwc_connection_string` (von `https://albyhub.com` oder eigenem Hub)
 - Das Add-on validiert NWC-Schema, `relay` und `secret` beim Start
+- Ingress zeigt eine Info-Seite (kein lokales Hub-Web-UI im Add-on)
 
 ### Expert-Modus (`node_mode: expert`)
 
@@ -59,6 +60,7 @@ Die offiziellen Alby-Hub-Flavors beschreiben, **wo** du Alby Hub betreiben kanns
 ## Konfigurationshinweise
 
 - `nwc_connection_string`: Nur im Cloud-Modus erforderlich (`nostr+walletconnect://...`)
+- `nwc_connection_string` wird im Add-on-UI als Passwortfeld maskiert angezeigt
 - `tor_enabled`: Aktiviert ausgehende Kommunikation über Proxy/Tor
 - `tor_socks5_url`: Tor/SOCKS-Proxy-URL (z. B. `socks5h://127.0.0.1:9050`), nur bei `tor_enabled: true`
 - `external_access_enabled`: Bindet bei `true` an `0.0.0.0`; nur mit geeigneter Firewall nutzen
