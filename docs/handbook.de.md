@@ -173,7 +173,7 @@ Wenn Funds nach Recovery nicht sichtbar sind:
 
 <a id="addon-setting-tor-socks5-url-de"></a>
 ### `tor_socks5_url`
-- Proxy-URL für Tor/ SOCKS5, z. B. `socks5h://127.0.0.1:9050`.
+- Proxy-URL für Tor/SOCKS5, z. B. `socks5h://127.0.0.1:9050`.
 - Wird nur verwendet, wenn `tor_enabled: true`.
 - `socks5h://` ist empfohlen, damit DNS ebenfalls über Tor aufgelöst wird.
 
