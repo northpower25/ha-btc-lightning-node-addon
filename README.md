@@ -63,17 +63,24 @@ Dieses Repository stellt ein Home Assistant Add-on bereit, mit dem du **Bitcoin-
 - Handbuch (DE): [docs/handbook.de.md](docs/handbook.de.md)
 - Handbook (EN): [docs/handbook.en.md](docs/handbook.en.md)
 
-## Schnellstart: Installation in Home Assistant
+## Schnellstart: Installation in Home Assistant (Add-on zuerst, dann Integration)
+
+### 1) Add-on installieren
+
+1. **Add-on-Repository hinzufügen**  
+   In Home Assistant: **Einstellungen → Add-ons → Add-on-Store → Repositories**
+2. **Add-on „Alby Hub“ installieren und starten**
+3. **Add-on konfigurieren**  
+   - `node_mode: cloud` mit `nwc_connection_string`, oder  
+   - `node_mode: expert` mit lokalem/externem Backend
+4. **NWC-Verbindung im Hub bereitstellen**  
+   Im Expert-Modus nach der initialen Hub-Einrichtung den NWC-String erzeugen.
+
+### 2) Integration installieren und verbinden
 
 1. **Integration per HACS installieren**  
    Repository: [`ha-btc-alby-hub-integration`](https://github.com/northpower25/ha-btc-alby-hub-integration)
-2. **Add-on-Repository hinzufügen**  
-   In Home Assistant: **Einstellungen → Add-ons → Add-on-Store → Repositories**
-3. **Add-on „Alby Hub“ installieren und starten**
-4. **Add-on konfigurieren**  
-   - `node_mode: cloud` mit `nwc_connection_string`, oder  
-   - `node_mode: expert` mit lokalem/externem Backend
-5. **Integration mit dem NWC-String verbinden**
+2. **Integration mit dem NWC-String verbinden**
 
 Vollständige Schritt-für-Schritt-Anleitungen:
 - DE: [Handbuch](docs/handbook.de.md#installation-und-konfiguration-in-home-assistant-hacs--manuell)
