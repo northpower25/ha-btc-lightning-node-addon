@@ -44,10 +44,10 @@ if bashio::var.true "${TOR_ENABLED}"; then
     fi
 
     case "${TOR_SOCKS5_URL}" in
-      socks5://*|socks5h://*|http://*|https://*)
+      socks5://*|socks5h://*)
         ;;
       *)
-        bashio::log.error "Invalid tor_socks5_url: must start with socks5://, socks5h://, http:// or https://"
+        bashio::log.error "Invalid tor_socks5_url: must start with socks5:// or socks5h://"
         exit 1
         ;;
     esac
