@@ -158,6 +158,9 @@ Wenn Funds nach Recovery nicht sichtbar sind:
 ### `node_mode`
 - `cloud`: Kein lokaler Hub im Add-on. Du brauchst `nwc_connection_string`.
 - `expert`: Alby Hub läuft lokal im Add-on. Du brauchst Backend-Einstellungen.
+- Praxisregel:
+  - Bei `cloud` sind primär `nwc_connection_string`, `tor_*`, `log_level` relevant.
+  - Bei `expert` sind primär `bitcoin_network`, `node_backend`, `hub_unlock_password` und ggf. backend-spezifische Felder relevant.
 
 <a id="addon-setting-log-level-de"></a>
 ### `log_level`
@@ -207,8 +210,24 @@ Wenn Funds nach Recovery nicht sichtbar sind:
 <a id="addon-setting-node-backend-de"></a>
 ### `node_backend`
 - Nur im Expert-Modus relevant.
-- `LDK`: eingebettet (einfachster Start).
-- `LND`, `CLN`, `Phoenixd`, `Cashu`: externe/alternative Backends mit eigenen Zugangsdaten.
+- Kurze Entscheidungsgrundlage für Einsteiger:
+  - `LDK`: eingebettetes Backend direkt im Hub. **Einfachster Start**, wenig externe Abhängigkeiten.
+  - `LND`: externer LND-Node (weit verbreitet). Gut, wenn du bereits einen LND-Stack betreibst.
+  - `CLN`: externer Core-Lightning-Node. Sinnvoll, wenn deine bestehende Infrastruktur auf CLN basiert.
+  - `Phoenixd`: Anbindung an phoenixd. Praktisch, wenn du bereits Phoenixd nutzt.
+  - `Cashu`: experimentelles Ecash-Backend. Für fortgeschrittene Tests, nicht als Standard-Einstieg.
+
+#### Unterschiede der Varianten (kurz & praxisnah)
+
+| Variante | Wo läuft Wallet/Node-Logik? | Aufwand | Typischer Use Case |
+|---|---|---|---|
+| `LDK` | Im lokalen Add-on (Hub-intern) | Niedrig | Du willst schnell starten und lokal bleiben |
+| `LND` | Externe LND-Instanz | Mittel | Du hast bereits LND im Betrieb |
+| `CLN` | Externe CLN-Instanz | Mittel | Du nutzt Core Lightning bereits |
+| `Phoenixd` | Externe Phoenixd-Instanz | Mittel | Du nutzt Phoenixd als bestehendes Backend |
+| `Cashu` | Ecash-orientiertes Backend | Höher (experimentell) | Lern-/Testumgebungen für Cashu-Workflows |
+
+Empfehlung für den Einstieg: **`LDK`** wählen, danach bei Bedarf auf ein externes Backend wechseln.
 
 <a id="addon-setting-hub-unlock-password-de"></a>
 ### `hub_unlock_password`

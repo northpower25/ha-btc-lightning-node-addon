@@ -158,6 +158,9 @@ If funds are not visible after recovery:
 ### `node_mode`
 - `cloud`: No local hub process in the add-on. Requires `nwc_connection_string`.
 - `expert`: Alby Hub runs locally in the add-on. Requires backend settings.
+- Practical rule:
+  - For `cloud`, mainly `nwc_connection_string`, `tor_*`, and `log_level` matter.
+  - For `expert`, mainly `bitcoin_network`, `node_backend`, `hub_unlock_password`, and backend-specific fields matter.
 
 <a id="addon-setting-log-level-en"></a>
 ### `log_level`
@@ -207,8 +210,24 @@ If funds are not visible after recovery:
 <a id="addon-setting-node-backend-en"></a>
 ### `node_backend`
 - Relevant in expert mode only.
-- `LDK`: embedded (easiest start).
-- `LND`, `CLN`, `Phoenixd`, `Cashu`: external/alternative backends with dedicated credentials.
+- Quick decision guide for beginners:
+  - `LDK`: embedded backend directly in Hub. **Easiest start** with fewer external dependencies.
+  - `LND`: external LND node (widely used). Good if you already run an LND stack.
+  - `CLN`: external Core Lightning node. Best if your current stack is CLN-based.
+  - `Phoenixd`: connection to a phoenixd backend. Useful if you already operate phoenixd.
+  - `Cashu`: experimental ecash backend. Better for advanced testing than as a default entry path.
+
+#### Backend differences (short and practical)
+
+| Variant | Where wallet/node logic runs | Effort | Typical use case |
+|---|---|---|---|
+| `LDK` | Inside the local add-on (Hub-internal) | Low | You want a fast local start |
+| `LND` | External LND instance | Medium | You already operate LND |
+| `CLN` | External CLN instance | Medium | You already use Core Lightning |
+| `Phoenixd` | External phoenixd instance | Medium | You already rely on phoenixd |
+| `Cashu` | Ecash-oriented backend | Higher (experimental) | Learning/testing Cashu workflows |
+
+Beginner recommendation: start with **`LDK`**, then migrate to an external backend if needed.
 
 <a id="addon-setting-hub-unlock-password-en"></a>
 ### `hub_unlock_password`

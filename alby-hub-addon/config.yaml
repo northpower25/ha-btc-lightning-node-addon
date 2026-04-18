@@ -61,10 +61,11 @@ options:
 
   # ── Expert-Modus: Lightning-Backend & Netzwerk ────────────────────────────
   bitcoin_network: mainnet
-  # LDK: embedded, kein externer Node nötig (Standard/Empfehlung)
-  # LND: eigene LND-Node (lnd_rest_url + lnd_macaroon_hex erforderlich)
-  # CLN: Core Lightning (cln_rest_url + cln_rune erforderlich)
-  # Phoenixd: Phoenix-Node (phoenixd_url + phoenixd_password erforderlich)
+  # LDK: eingebettet, kein externer Node nötig (Standard/Empfehlung für Einstieg)
+  # LND: externe LND-Node (lnd_rest_url + lnd_macaroon_hex erforderlich)
+  # CLN: externe Core-Lightning-Node (cln_rest_url + cln_rune erforderlich)
+  # Phoenixd: externes phoenixd-Backend (phoenixd_url + phoenixd_password erforderlich)
+  # Cashu: experimentelles Ecash-Backend (nur für fortgeschrittene Tests)
   node_backend: "LDK"
   hub_unlock_password: ""
 
